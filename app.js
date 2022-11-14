@@ -1,8 +1,8 @@
 const express = require("express");
 const app = express();
 const expressLayouts = require("express-ejs-layouts");
-const fs = require("fs");
 const bodyParser = require("body-parser");
+const db = require("./modules/db");
 
 console.log("Environment: " + process.env.NODE_ENV);
 if (process.env.NODE_ENV === "development") {
@@ -10,11 +10,6 @@ if (process.env.NODE_ENV === "development") {
   const logger = require("morgan");
   app.use(logger("dev"));
 }
-
-fs.open("todododo.db", "w", (err, fd) => {
-  if (err) console.error(err);
-  if (fd != null) fs.close(fd);
-});
 
 const indexRouter = require("./routes/index");
 const apiRouter = require("./routes/api");
