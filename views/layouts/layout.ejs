@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>TodoDodo...</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/MaterialDesign-Webfont/7.0.96/css/materialdesignicons.min.css" />
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
+  <body>
+    <header>
+      <div class="nav">
+        <!--         <button class="menu-button">
+          <div class="menu-button-dash"></div>
+          <div class="menu-button-dash"></div>
+          <div class="menu-button-dash"></div>
+        </button> -->
+        <img src="/images/TODODODO.svg" alt="TODODODO" class="logo" />
+        <img src="/images/TODODODO Text.svg" alt="TodoDodo..." class="logo-text" />
+        <button class="nav-add-button">
+          <div class="nav-add-dash"></div>
+          <div class="nav-add-dash nav-add-dash-second"></div>
+        </button>
+      </div>
+    </header>
+    <!-- <div class="menu-slide menu-slide-open"></div> -->
+    <main><%- body %></main>
+    <script defer>
+      const stickynotes = document.getElementsByClassName("sticky");
+      for (let i = 0; i < stickynotes.length; i++) {
+        stickynotes[i].style.transform = `rotate( ${(Math.random() - 0.5) * 10}deg )`;
+      }
+    </script>
+  </body>
+</html>

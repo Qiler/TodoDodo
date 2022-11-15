@@ -1,0 +1,8 @@
+<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"  preserveAspectRatio="none">
+  <defs>
+    <filter id="gaussian-blur-filter-0" color-interpolation-filters="sRGB" x="-500%" y="-500%" width="1000%" height="1000%">
+      <feGaussianBlur stdDeviation="4 4" edgeMode="none"></feGaussianBlur>
+    </filter>
+  </defs>
+  <path style="filter: url(#gaussian-blur-filter-0); fill: rgba(0, 0, 0, 1);" d="M 16 15 L 84 15 C 84 10 84 50 95 95 L 5 95 C 16 50 16 10 16 15 Z"></path>
+</svg>

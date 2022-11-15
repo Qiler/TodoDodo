@@ -1,9 +1,8 @@
 const sqlite3 = require("sqlite3").verbose();
-const path = require("path");
 const fs = require("fs");
-initDB();
+//initDB();
 
-const db = new sqlite3.Database(path.join(__dirname, "../", "todododo.db"), sqlite3.OPEN_READWRITE, (err) => {
+const db = new sqlite3.Database("./todododo.db", sqlite3.OPEN_READWRITE, (err) => {
   if (err) return console.error(err.message);
   console.log("DB Loaded");
 });
@@ -42,8 +41,8 @@ async function initDB() {
     email        STRING  UNIQUE
                          NOT NULL,
     password     STRING  NOT NULL,
-    creationDate DATETIME DEFAULT SYSUTCDATETIME,
-    lastLogin    DATETIME DEFAULT SYSUTCDATETIME,
+    creationDate DATETIME DEFAULT CURRENT_TIMESTAMP,
+    lastLogin    DATETIME DEFAULT CURRENT_TIMESTAMP,
     active       BOOLEAN DEFAULT (true),
     avatar       STRING,
     points       INTEGER DEFAULT (0)
@@ -55,7 +54,7 @@ async function initDB() {
                          NOT NULL,
     owner                REFERENCES users (uid) 
                          NOT NULL,
-    crationDate DATETIME DEFAULT SYSUTCDATETIME,
+    crationDate DATETIME DEFAULT CURRENT_TIMESTAMP,
     name        STRING,
     color       STRING   DEFAULT ('#feff9c') 
   );`);
@@ -65,7 +64,7 @@ async function initDB() {
     tid                   PRIMARY KEY,
     nid                   REFERENCES notes (nid) 
                           NOT NULL,
-    creationDate DATETIME DEFAULT SYSUTCDATETIME,
+    creationDate DATETIME DEFAULT CURRENT_TIMESTAMP,
     dueDate      DATETIME,
     finishedDate DATETIME,
     checked      BOOLEAN,

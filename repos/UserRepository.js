@@ -7,7 +7,7 @@ class UserRepository {
     return await this.db.queryAsync("SELECT * FROM users", []);
   }
 
-  async GetByName(username) {
+  async GetByUsername(username) {
     return await this.db.queryAsync("SELECT * FROM users WHERE username = ?", [username]);
   }
 

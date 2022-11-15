@@ -1,0 +1,262 @@
+/* Handwritten */
+@import url("https://fonts.cdnfonts.com/css/zai-bazgroly");
+@import url("https://fonts.cdnfonts.com/css/fauves-book");
+@import url("https://fonts.cdnfonts.com/css/le-sofia");
+@import url("https://fonts.cdnfonts.com/css/travel-october");
+/* Cursives */
+@import url("https://fonts.cdnfonts.com/css/mixscribble");
+@import url("https://fonts.cdnfonts.com/css/amigho");
+@import url("https://fonts.cdnfonts.com/css/autumn-monoline");
+@import url("https://fonts.cdnfonts.com/css/lazy-writer");
+
+:root {
+  --sticky1: #ff7eb9;
+  --sticky2: #ff65a3;
+  --sticky3: #7afcff;
+  --sticky4: #feff9c;
+  --sticky5: #fff740;
+  --green: rgb(80, 139, 80);
+}
+
+html,
+body {
+  min-height: 100vh;
+  height: fit-content;
+  padding: 0px;
+  margin: 0px;
+}
+
+body {
+  font: 14px Trebuchet MS;
+  background-color: var(--green);
+  background-image: url(/images/cork2.jpg);
+  background-size: 15rem;
+}
+
+.hidden {
+  display: none;
+}
+
+.nav {
+  height: 3rem;
+  max-height: 3rem;
+  width: 100%;
+  display: flex;
+  position: fixed;
+  top: 0;
+  z-index: 10;
+  /* background-image: url(/images/wood4.jpg); */
+  background-color: rgba(255, 255, 255, 0.774);
+  border-bottom: 1px solid black;
+  box-shadow: 0.4rem 0.4rem 1rem rgba(0, 0, 0, 0.4);
+  justify-content: flex-start;
+}
+
+/* .menu-button {
+  min-width: 3rem;
+  padding: 0;
+  margin: 0;
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  display: block;
+}
+
+.menu-button:hover .menu-button-dash {
+  background-color: rgb(61, 61, 61);
+}
+
+.menu-button-dash {
+  background-color: black;
+  width: calc(100% - 0.8rem);
+  height: calc((100% / 3) - (0.1rem * 6));
+  margin: 0.4em 0.4rem;
+  border-radius: 1rem;
+} */
+
+.logo {
+  margin: 0.2rem;
+  display: block;
+}
+
+.logo-text {
+  padding: 0.2rem 0;
+}
+
+@media screen and (max-width: 600px) {
+  .logo-text {
+    padding: 0.6rem 0;
+  }
+}
+
+.nav-add-button {
+  min-width: 3rem;
+  padding: 0;
+  margin: 0;
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  display: block;
+  margin-right: 0.2rem;
+  position: relative;
+  margin-left: auto;
+}
+
+.nav-add-dash {
+  background-color: black;
+  width: 2.2rem;
+  height: 0.4rem;
+  position: absolute;
+  border-radius: 1rem;
+  top: 50%;
+  left: 50%;
+  translate: -50% -50%;
+}
+
+.nav-add-dash-second {
+  transform: rotate(90deg);
+}
+
+.nav-add-button:hover .nav-add-dash {
+  background-color: rgb(61, 61, 61);
+}
+
+main {
+  height: calc(100% - 6rem - 1px);
+  padding-top: 3rem;
+}
+
+/* .menu-slide {
+  position: fixed;
+  height: 100%;
+  width: 1rem;
+  top: 3rem;
+  background-color: rgba(0, 0, 0, 0.829);
+  z-index: 1;
+}
+
+.menu-slide {
+  position: fixed;
+  height: 100%;
+  width: 0rem;
+  top: 3rem;
+  background-color: rgba(0, 0, 0, 0.829);
+  z-index: 1;
+  transition: width 0.2sec;
+}
+
+.menu-slide-open {
+  width: 20rem;
+} */
+
+.container {
+  margin: 3rem;
+  display: grid;
+  /* grid-template-columns: 1fr 1fr 1fr 1fr; */
+  grid-template-columns: repeat(auto-fit, minmax(25rem, 1fr));
+  grid-row: auto;
+  grid-gap: 1rem;
+  align-items: start;
+}
+
+@media screen and (max-width: 600px) {
+  .container {
+    margin: 1rem;
+  }
+}
+
+.sticky {
+  /*   background-color: var(--sticky5); */
+  /* box-shadow: 0.1rem 0.1rem 1rem rgba(0, 0, 0, 0.4); */
+  /* background-image: url(/public/template/images/sticky.svg); */
+  position: relative;
+  max-width: 30rem;
+}
+
+.sticky-container {
+  background-color: var(--sticky4);
+  mask-image: url(/images/sticky-mask.svg);
+  mask-size: 100% 100%;
+}
+
+.sticky::before {
+  position: absolute;
+  content: "";
+  width: 100%;
+  height: 100%;
+  background-image: url(/images/sticky-shadow2.svg);
+  background-size: 100% 100%;
+  filter: drop-shadow(0.5rem 0.5rem 0.2rem rgba(0, 0, 0, 0.4));
+  /* z-index: -1; */
+}
+
+.sticky-title {
+  background-color: rgba(255, 255, 255, 0.322);
+  border: none;
+  outline: none;
+  width: 100%;
+  height: 3rem;
+  text-align: center;
+  border-radius: 2px;
+  padding: 0;
+  margin-bottom: 1rem;
+  font: 20px "Travel October", sans-serif;
+}
+
+.sticky *::selection {
+  color: white;
+  background: gray;
+}
+
+.sticky-list {
+  min-height: 2rem;
+  margin-top: 1rem;
+  padding: 0 12%;
+  font: 20px "Travel October", sans-serif;
+}
+
+.sticky-add {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  font: 3rem "Travel October", sans-serif;
+  height: 2rem;
+  width: 2rem;
+  cursor: pointer;
+  border: none;
+  background-color: transparent;
+  margin: 0 auto;
+}
+
+.sticky-add:hover {
+  font-size: 4rem;
+}
+
+/* .sticky:nth-child(1) {
+  grid-row: 1 / 10;
+}
+
+.sticky:nth-child(4) {
+  grid-row: 1 / 10;
+} */
+
+/* .sticky:before {
+  display: block;
+  content: "";
+  width: 0;
+  height: 0;
+  padding-bottom: 100%;
+} */
+
+/* footer {
+  height: 3rem;
+  width: 100%;
+  background-image: url(/images/wood4.jpg);
+  background-color: #fff740;
+  border-top: 1px solid black;
+  box-shadow: 1rem 1rem 3rem rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+} */
