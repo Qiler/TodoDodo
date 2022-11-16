@@ -5,10 +5,6 @@ const expressLayouts = require("express-ejs-layouts");
 const session = require("express-session");
 //const SQLiteStore = require("connect-sqlite3")(session);
 const bodyParser = require("body-parser");
-const indexRouter = require("./routes/index");
-//const apiRouter = require("./routes/api");
-const loginRouter = require("./routes/login");
-const registerRouter = require("./routes/register");
 const secret = process.env.TODODODO_SECRET || "Lv40&1H8Qfu4Su*mHw!s67I$Qa1R2IgR";
 const path = require("path");
 
@@ -41,9 +37,10 @@ app.use(
   // Redirect when not logged in.
 }); */
 
-app.use("/", indexRouter);
-app.use("/login", loginRouter);
-app.use("/register", registerRouter);
-//app.use("/api", apiRouter);
+app.use("/", require("./routes/index"));
+app.use("/login", require("./routes/login"));
+app.use("/register", require("./routes/register"));
+app.use("/note", require("./routes/note"));
+//app.use("/api", require("./routes/api"));
 
 app.listen(process.env.PORT || 3000);

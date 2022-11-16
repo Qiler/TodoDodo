@@ -1,4 +1,5 @@
 const express = require("express");
+const Note = require("../models/Note");
 const router = express.Router();
 const User = require("../models/User");
 
@@ -29,11 +30,14 @@ router.get("/", async (req, res) => {
   if (!req.session.loggedIn) {
     res.redirect("/login");
   } else {
-    /*     let stickyDb = await notes.GetByUid(req.session.user.uid);
-    stickyDb.forEach(async (note) => {
-      note.tasks = await tasks.GetByNid(note.nid);
-    }); */
-    res.render("index");
+    let user = new User(req.session.user);
+    let notes = await user.GetNotes();
+    notes.forEach(async (note) => {
+      note = new Note(note);
+      note.tasks = await note.GetTasks();
+    });
+    console.log(notes);
+    res.render("index", { notes: notes, noteNumber: Object.keys(notes).length });
   }
 });
 

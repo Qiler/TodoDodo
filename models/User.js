@@ -18,10 +18,8 @@ class User {
 
   async GetNotes() {
     const noteDb = await notes.GetByUid(this.uid);
-    console.log(noteDb);
     let noteArray = [];
     noteDb?.forEach((note) => {
-      console.log(note);
       noteArray.push(new Note(note));
     });
     return noteArray;

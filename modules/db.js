@@ -53,7 +53,8 @@ async function initDB() {
   await db.runAsync(`CREATE TABLE IF NOT EXISTS notes (
     nid                  PRIMARY KEY
                          AUTOINCREMENT,
-    owner                REFERENCES users (uid) 
+    owner                REFERENCES users (uid)
+                         ON DELETE CASCADE
                          NOT NULL,
     creationDate DATETIME DEFAULT CURRENT_TIMESTAMP,
     name         STRING,
@@ -64,13 +65,15 @@ async function initDB() {
   await db.runAsync(`CREATE TABLE IF NOT EXISTS tasks (
     tid                   PRIMARY KEY
                           AUTOINCREMENT,
-    nid                   REFERENCES notes (nid) 
+    nid                   REFERENCES notes (nid)
+                          ON DELETE CASCADE
                           NOT NULL,
     creationDate DATETIME DEFAULT CURRENT_TIMESTAMP,
     dueDate      DATETIME,
     finishedDate DATETIME,
     checked      BOOLEAN,
-    checkedBy    INTEGER  REFERENCES users (uid) ON DELETE NO ACTION,
+    checkedBy    INTEGER  REFERENCES users (uid)
+                          ON DELETE NO ACTION,
     description  STRING,
     importance   INTEGER  DEFAULT (1),
     color        STRING   DEFAULT ('#002b59'),
@@ -80,8 +83,10 @@ async function initDB() {
   //USER NOTES
   await db.runAsync(`CREATE TABLE IF NOT EXISTS userNotes (
     nid                   REFERENCES notes (nid)
+                          ON DELETE CASCADE
                           NOT NULL,
     uid                   REFERENCES users (uid)
+                          ON DELETE CASCADE
                           NOT NULL,
     editPerm     BOOLEAN  DEFAULT (false),
     deletePerm   BOOLEAN  DEFAULT (false),
