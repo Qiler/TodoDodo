@@ -4,19 +4,26 @@ class NoteRepository {
   }
 
   async GetAll() {
-    return await this.db.queryAsync("SELECT * FROM notes", []);
+    const result = await this.db.queryAsync("SELECT * FROM notes", []);
+    return result?.rows;
   }
 
   async GetByOwner(uid) {
-    return await this.db.queryAsync("SELECT * FROM notes WHERE owner = ?", [uid]);
+    const result = await this.db.queryAsync("SELECT * FROM notes WHERE owner = ?", [uid]);
+    return result?.rows;
   }
 
   async GetByUid(uid) {
-    return await this.db.queryAsync("SELECT * FROM notes LEFT JOIN userNotes ON notes.nid = userNotes.nid WHERE userNotes.uid = ?", [uid]);
+    const result = await this.db.queryAsync("SELECT * FROM notes LEFT JOIN userNotes ON notes.nid = userNotes.nid WHERE userNotes.uid = ?", [uid]);
+    return result?.rows;
   }
 
   async AddNote(uid, name, color) {
-    return await this.db.runAsync("INSERT INTO notes (owner,name,color) VALUES (?,?,?)", [uid, name, color]);
+    const result = await this.db.queryAsync("INSERT INTO notes (owner,name,color) VALUES (?,?,?) RETURNING nid", [uid, name, color]);
+    if (result && result.rows && result.rows[0]) {
+      return result.rows[0];
+    }
+    return null;
   }
 
   async DeleteNote(nid) {
@@ -32,7 +39,11 @@ class NoteRepository {
   }
 
   async AddAccess(nid, uid) {
-    return await this.db.runAsync("INSERT INTO userNotes () VALUES ()", [nid, uid]);
+    return await this.db.runAsync("INSERT INTO userNotes (nid,uid) VALUES (?,?)", [nid, uid]);
+  }
+
+  async AddFullAccess(nid, uid) {
+    return await this.db.runAsync("INSERT INTO userNotes (nid,uid,editPerm,deletePerm,taskPerm,sharePerm) VALUES (?,?,true,true,true,true)", [nid, uid]);
   }
 
   async RemoveAccess(nid, uid) {

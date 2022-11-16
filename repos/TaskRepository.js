@@ -4,19 +4,29 @@ class TaskRepository {
   }
 
   async GetAll() {
-    return await this.db.queryAsync("SELECT * FROM tasks WHERE", []);
+    const result = await this.db.queryAsync("SELECT * FROM tasks WHERE", []);
+    return result?.rows;
   }
 
   async GetByNid(nid) {
-    return await this.db.queryAsync("SELECT * FROM tasks WHERE nid = ?", [nid]);
+    const result = await this.db.queryAsync("SELECT * FROM tasks WHERE nid = ?", [nid]);
+    return result?.rows;
   }
 
   async GetByTid(tid) {
-    return await this.db.queryAsync("SELECT * FROM task WHERE tid = ?", [tid]);
+    const result = await this.db.queryAsync("SELECT * FROM task WHERE tid = ? LIMIT 1", [tid]);
+    if (result && result.rows && result.rows[0]) {
+      return result.rows[0];
+    }
+    return null;
   }
 
   async AddTask(nid, description) {
-    return await this.db.runAsync("INSERT INTO tasks (nid,description) VALUES (?,?)", [nid, description]);
+    const result = await this.db.queryAsync("INSERT INTO tasks (nid,description) VALUES (?,?) RETURNING tid", [nid, description]);
+    if (result && result.rows && result.rows[0]) {
+      return result.rows[0];
+    }
+    return null;
   }
 
   async DeleteTask(tid) {

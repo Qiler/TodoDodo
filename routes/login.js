@@ -12,9 +12,11 @@ router.get("/", async (req, res) => {
 
 router.post("/auth", async (req, res) => {
   try {
-    let dbUser = (await users.GetByUsername(req.body.username)).rows[0];
+    let dbUser = await users.GetByUsername(req.body.username);
+    if (dbUser?.uid == undefined) {
+      throw "Unable to find user in database.";
+    }
     let user = new User(dbUser);
-    console.log(user);
     let loggedIn = await bcrypt.compare(req.body.password, dbUser.password);
     if (loggedIn) {
       req.session.regenerate(function (err) {
@@ -26,9 +28,12 @@ router.post("/auth", async (req, res) => {
           res.redirect("/");
         });
       });
+    } else {
+      throw "Incorrect password.";
     }
   } catch (err) {
     console.error(err);
+    res.render("login", { errorMessage: err, formInput: { username: req.body.username } });
   }
 });
 

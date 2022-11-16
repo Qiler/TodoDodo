@@ -4,23 +4,40 @@ class UserRepository {
   }
 
   async GetAll() {
-    return await this.db.queryAsync("SELECT * FROM users", []);
+    const result = await this.db.queryAsync("SELECT * FROM users", []);
+    return result?.rows;
   }
 
   async GetByUsername(username) {
-    return await this.db.queryAsync("SELECT * FROM users WHERE username = ?", [username]);
+    const result = await this.db.queryAsync("SELECT * FROM users WHERE username = ? LIMIT 1", [username]);
+    if (result && result.rows && result.rows[0]) {
+      return result.rows[0];
+    }
+    return null;
   }
 
   async GetByUid(uid) {
-    return await this.db.queryAsync("SELECT * FROM users WHERE uid = ?", [uid]);
+    const result = await this.db.queryAsync("SELECT * FROM users WHERE uid = ? LIMIT 1", [uid]);
+    if (result && result.rows && result.rows[0]) {
+      return result.rows[0];
+    }
+    return null;
   }
 
   async GetByEmail(email) {
-    return await this.db.queryAsync("SELECT * FROM users WHERE email = ?", [email]);
+    const result = await this.db.queryAsync("SELECT * FROM users WHERE email = ? LIMIT 1", [email]);
+    if (result && result.rows && result.rows[0]) {
+      return result.rows[0];
+    }
+    return null;
   }
 
   async AddUser(username, email, password) {
-    return await this.db.runAsync("INSERT INTO users (username,email,password) VALUES (?,?,?)", [username, email, password]);
+    const result = await this.db.queryAsync("INSERT INTO users (username,email,password) VALUES (?,?,?) RETURNING uid", [username, email, password]);
+    if (result && result.rows && result.rows[0]) {
+      return result.rows[0];
+    }
+    return null;
   }
 
   async DeleteUser(uid) {

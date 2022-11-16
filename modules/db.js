@@ -35,7 +35,8 @@ async function initDB() {
 
   //USERS
   await db.runAsync(`CREATE TABLE IF NOT EXISTS users (
-    uid          INTEGER PRIMARY KEY,
+    uid          INTEGER PRIMARY KEY
+                         AUTOINCREMENT,
     username     STRING  UNIQUE
                          NOT NULL,
     email        STRING  UNIQUE
@@ -51,28 +52,28 @@ async function initDB() {
   //NOTES
   await db.runAsync(`CREATE TABLE IF NOT EXISTS notes (
     nid                  PRIMARY KEY
-                         NOT NULL,
+                         AUTOINCREMENT,
     owner                REFERENCES users (uid) 
                          NOT NULL,
-    crationDate DATETIME DEFAULT CURRENT_TIMESTAMP,
-    name        STRING,
-    color       STRING   DEFAULT ('#feff9c') 
+    creationDate DATETIME DEFAULT CURRENT_TIMESTAMP,
+    name         STRING,
+    color        STRING   DEFAULT ('#feff9c') 
   );`);
 
   //TASKS
   await db.runAsync(`CREATE TABLE IF NOT EXISTS tasks (
-    tid                   PRIMARY KEY,
+    tid                   PRIMARY KEY
+                          AUTOINCREMENT,
     nid                   REFERENCES notes (nid) 
                           NOT NULL,
     creationDate DATETIME DEFAULT CURRENT_TIMESTAMP,
     dueDate      DATETIME,
     finishedDate DATETIME,
     checked      BOOLEAN,
-    checkedBy    INTEGER,
+    checkedBy    INTEGER  REFERENCES users (uid) ON DELETE NO ACTION,
     description  STRING,
     importance   INTEGER  DEFAULT (1),
-    color        STRING   NOT NULL
-                          DEFAULT ('#002b59'),
+    color        STRING   DEFAULT ('#002b59'),
     [order]      INTEGER
   );`);
 

@@ -1,15 +1,16 @@
 <div class="login-div">
   <div class="login-box">
-    <form action="/login/auth" method="POST">
-      <h2>Login</h2>
+    <form action="/register/submit" method="POST">
+      <h2>Register</h2>
       <h4><%=locals?.errorMessage%></h4>
       <label for="input-username">Username</label>
       <input type="text" class="login-input" name="username" id="input-username" placeholder="👤 Type in your username" value="<%= locals?.formInput?.username %>" />
+      <label for="input-username">Email</label>
+      <input type="text" class="login-input" name="email" id="input-email" placeholder="✉ Type in your email" value="<%= locals?.formInput?.email %>" />
       <label for="input-password">Password</label>
       <input type="password" class="login-input" name="password" id="input-password" placeholder="🔒 Type in your password" />
       <div class="login-submit">
-        <button type="submit">Log in</button>
-        <a href="/register"><button type="button">Register</button></a>
+        <button type="submit">Register</button>
       </div>
     </form>
   </div>
