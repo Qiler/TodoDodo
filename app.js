@@ -41,6 +41,7 @@ app.use("/", require("./routes/index"));
 app.use("/login", require("./routes/login"));
 app.use("/register", require("./routes/register"));
 app.use("/note", require("./routes/note"));
+app.use("/task", require("./routes/task"));
 //app.use("/api", require("./routes/api"));
 
 app.listen(process.env.PORT || 3000);

@@ -1,29 +1,4 @@
 <main>
-  <div class="cork-board" style="background-color: rgba(255, 0, 0, 0)">
-    <div class="container">
-      <% notes.forEach(note => { %>
-      <div class="sticky" style="z-index: <%= noteNumber-- %>">
-        <div class="sticky-container">
-          <div class="sticky-footer">
-            <form action="/note/editname/:<%= note.nid %>">
-              <input class="sticky-title" type="text" value="<%= note.name %>" />
-            </form>
-          </div>
-          <div class="sticky-list">
-            <% note.tasks?.forEach(task => { %>
-            <li><%= task.description %></li>
-            <% }) %>
-          </div>
-          <button class="sticky-add">+</button>
-        </div>
-      </div>
-      <% }) %>
-    </div>
-  </div>
+      <%- include('partials/sticky.ejs', {notes: notes, noteNumber: noteNumber}); %>
 </main>
-<script defer>
-  const stickynotes = document.getElementsByClassName("sticky");
-  for (let i = 0; i < stickynotes.length; i++) {
-    stickynotes[i].style.transform = `rotate( ${(Math.random() - 0.5) * 20}deg )`;
-  }
-</script>
+<script defer src="/js/notes.js"></script>

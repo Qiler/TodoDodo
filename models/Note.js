@@ -9,7 +9,11 @@ class Note {
   constructor(note) {
     this.nid = note.nid;
     this.owner = note.owner;
-    this.creationDate = new Date(note.creationDate);
+    if (note.creationDate instanceof Date){
+      this.creationDate = note.creationDate;
+    } else {
+      this.creationDate = new Date(note.creationDate * 1000);
+    }
     this.name = note.name;
     this.color = note.color;
   }
@@ -20,15 +24,7 @@ class Note {
     taskDb?.forEach((task) => {
       taskArray.push(new Task(task));
     });
-    return taskArray;
-  }
-
-  async GetTasks() {
-    const taskDb = await tasks.GetByNid(this.nid);
-    let taskArray = [];
-    taskDb?.forEach((task) => {
-      taskArray.push(new Note(task));
-    });
+    this.tasks = taskArray;
     return taskArray;
   }
 
@@ -42,9 +38,16 @@ class Note {
 
   async DeleteByUser(uid) {
     let noteWithPerms = await notes.CheckDeletePerm(uid, this.nid);
-    console.log(noteWithPerms);
     if (noteWithPerms?.nid) {
       return await notes.DeleteNote(noteWithPerms.nid);
+    }
+    return null;
+  }
+
+  async ChangeTitleByUser(uid, name) {
+    let noteWithPerms = await notes.CheckEditPerm(uid, this.nid);
+    if (noteWithPerms?.nid) {
+      return await notes.UpdateName(noteWithPerms.nid, name);
     }
     return null;
   }

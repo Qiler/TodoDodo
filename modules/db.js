@@ -42,8 +42,8 @@ async function initDB() {
     email        STRING  UNIQUE
                          NOT NULL,
     password     STRING  NOT NULL,
-    creationDate DATETIME DEFAULT CURRENT_TIMESTAMP,
-    lastLogin    DATETIME DEFAULT CURRENT_TIMESTAMP,
+    creationDate INTEGER DEFAULT (strftime('%s')),
+    lastLogin    INTEGER DEFAULT (strftime('%s')),
     active       BOOLEAN DEFAULT (true),
     avatar       STRING,
     points       INTEGER DEFAULT (0)
@@ -51,26 +51,26 @@ async function initDB() {
 
   //NOTES
   await db.runAsync(`CREATE TABLE IF NOT EXISTS notes (
-    nid                  PRIMARY KEY
+    nid          INTEGER PRIMARY KEY
                          AUTOINCREMENT,
     owner                REFERENCES users (uid)
                          ON DELETE CASCADE
                          NOT NULL,
-    creationDate DATETIME DEFAULT CURRENT_TIMESTAMP,
+    creationDate INTEGER DEFAULT (strftime('%s')),
     name         STRING,
     color        STRING   DEFAULT ('#feff9c') 
   );`);
 
   //TASKS
   await db.runAsync(`CREATE TABLE IF NOT EXISTS tasks (
-    tid                   PRIMARY KEY
+    tid          INTEGER  PRIMARY KEY
                           AUTOINCREMENT,
     nid                   REFERENCES notes (nid)
                           ON DELETE CASCADE
                           NOT NULL,
-    creationDate DATETIME DEFAULT CURRENT_TIMESTAMP,
-    dueDate      DATETIME,
-    finishedDate DATETIME,
+    creationDate INTEGER DEFAULT (strftime('%s')),
+    dueDate      INTEGER,
+    finishedDate INTEGER,
     checked      BOOLEAN,
     checkedBy    INTEGER  REFERENCES users (uid)
                           ON DELETE NO ACTION,

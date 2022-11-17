@@ -1,0 +1,43 @@
+<div class="cork-board" style="background-color: rgba(255, 0, 0, 0)">
+  <div class="container">
+    <% notes.forEach(note => { %>
+      <div class="sticky" style="z-index: <%= noteNumber-- %>" id="sticky-<%= note.nid %>" data-nid="<%= note.nid %>">
+        <div class="sticky-container">
+          <div class="sticky-footer">
+            <form action="/note/editname/<%= note.nid %>" autocomplete="off" method="POST">
+              <input class="sticky-title" name="name" type="text" value="<%= note.name %>" autocomplete="false" />
+            </form>
+          </div>
+          <div class="sticky-list">
+            <% note.tasks?.forEach(task => { %>
+            <form class="task-form" action="/task/edit/<%= task.tid %>" data-tid="<%= task.tid %>" autocomplete="off" method="POST">
+              <input class="task-checkbox" type="checkbox" name="checked" id="task-checkbox<%= task.tid %>" <% if( task.checked ) { %> checked <% } %>/>
+              <label class="task-checkbox-label" for="task-checkbox<%= task.tid %>">□</label>
+              <input class= "task-description-hidden" name="description" type="text" hidden >
+              <span class="task-description" type="text" role="textbox" contenteditable value="<%= task.description %>" autocomplete="false"><%= task.description %></span>
+            </form>
+            <% }) %>
+          </div>
+          <form action="/task/create/<%= note.nid %>" method="POST">
+            <button class="sticky-add" type="submit">+</button>
+          </form>
+        </div>
+        <div class="sticky-menu">
+          <div class="sticky-menu-button">
+            <div class="sticky-menu-button-bars"></div>
+            <div class="sticky-menu-button-bars"></div>
+            <div class="sticky-menu-button-bars"></div>
+          </div>
+          <div class="sticky-menu-content">
+            <form class="sticky-menu-content-delete-form" action="/note/delete/<%= note.nid %>" method="POST">
+              <button class="sticky-menu-content-delete-button" type="submit">Delete note</button>
+            </form>
+            <span class="bold">Owner: </span><%= note.owner %><br/>
+            <span class="bold">Creation date: </span><script>document.write( new Date("<%= note.creationDate.toISOString() %>").toLocaleString() )</script><br/>
+            <span class="bold">Color: </span><input type="color" class="sticky-color" id="sticky-color-<%= note.nid %>" name="color" value="<%= note.color %>">
+          </div>
+        </div>
+      </div>
+    <% }) %>
+  </div>
+</div>

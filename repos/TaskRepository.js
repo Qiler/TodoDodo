@@ -14,7 +14,7 @@ class TaskRepository {
   }
 
   async GetByTid(tid) {
-    const result = await this.db.queryAsync("SELECT * FROM task WHERE tid = ? LIMIT 1", [tid]);
+    const result = await this.db.queryAsync("SELECT * FROM tasks WHERE tid = ? LIMIT 1", [tid]);
     if (result && result.rows && result.rows[0]) {
       return result.rows[0];
     }
@@ -31,6 +31,13 @@ class TaskRepository {
 
   async DeleteTask(tid) {
     return await this.db.runAsync("DELETE FROM tasks WHERE tid = ?", [tid]);
+  }
+
+  async Update(tid, checked, description, checkedBy) {
+    if (checked == true) {
+      await this.db.runAsync("UPDATE tasks SET checkedBy = ?, finishedDate = CURRENT_TIMESTAMP WHERE tid = ?", [checkedBy, tid]);
+    }
+    return await this.db.runAsync("UPDATE tasks SET description = ?, checked = ? WHERE tid = ?", [description, checked, tid]);
   }
 
   async UpdateDescription(tid, description) {
