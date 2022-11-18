@@ -1,7 +1,7 @@
 <div class="cork-board" style="background-color: rgba(255, 0, 0, 0)">
   <div class="container">
     <% notes.forEach(note => { %>
-      <div class="sticky" style="z-index: <%= noteNumber-- %>" id="sticky-<%= note.nid %>" data-nid="<%= note.nid %>">
+      <div class="sticky" style="z-index: <%= notesCount-- %>" id="sticky-<%= note.nid %>" data-nid="<%= note.nid %>">
         <div class="sticky-container">
           <div class="sticky-footer">
             <form action="/note/editname/<%= note.nid %>" autocomplete="off" method="POST">
@@ -10,15 +10,20 @@
           </div>
           <div class="sticky-list">
             <% note.tasks?.forEach(task => { %>
-            <form class="task-form" action="/task/edit/<%= task.tid %>" data-tid="<%= task.tid %>" autocomplete="off" method="POST">
-              <input class="task-checkbox" type="checkbox" name="checked" id="task-checkbox<%= task.tid %>" <% if( task.checked ) { %> checked <% } %>/>
-              <label class="task-checkbox-label" for="task-checkbox<%= task.tid %>">□</label>
-              <input class= "task-description-hidden" name="description" type="text" hidden >
-              <span class="task-description" type="text" role="textbox" contenteditable value="<%= task.description %>" autocomplete="false"><%= task.description %></span>
-            </form>
+              <div class="task">
+                <form class="task-form" action="/task/edit/<%= task.tid %>" data-tid="<%= task.tid %>" autocomplete="off" method="POST">
+                  <input class="task-checkbox" type="checkbox" name="checked" id="task-checkbox<%= task.tid %>" <% if( task.checked ) { %> checked <% } %>/>
+                  <label class="task-checkbox-label" for="task-checkbox<%= task.tid %>">□</label>
+                  <input class="task-description-hidden" name="description" type="hidden" value="<%= task.description %>">
+                  <span class="task-description" type="text" role="textbox" contenteditable="true" value="<%= task.description %>" autocomplete="false"><%= task.description %></span>
+                </form>
+                <form class="task-form-delete" action="/task/delete/<%= task.tid %>" data-tid="<%= task.tid %>" autocomplete="off" method="POST">
+                  <button class="task-form-delete-button" type="submit"><i class="mdi mdi-trash-can"></i></button>
+                </form>
+              </div>
             <% }) %>
           </div>
-          <form action="/task/create/<%= note.nid %>" method="POST">
+          <form class="sticky-add-form" action="/task/create/<%= note.nid %>" method="POST">
             <button class="sticky-add" type="submit">+</button>
           </form>
         </div>

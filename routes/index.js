@@ -13,7 +13,7 @@ router.get("/", async (req, res) => {
       notes[i] = new Note(notes[i]);
       await notes[i].GetTasks();
     }
-    res.render("index", { notes: notes, noteNumber: Object.keys(notes).length });
+    res.render("index", { notes: notes, notesCount: Object.keys(notes).length });
   }
 });
 

@@ -31,6 +31,18 @@ router.post("/edit/:taskId", async (req, res) => {
   }
 });
 
+router.post("/delete/:taskId", async (req, res) => {
+  if (!req.session.loggedIn) {
+    res.redirect("/login");
+  } else {
+    req.params.taskId = parseInt(req.params.taskId);
+    let task = await tasks.GetByTid(req.params.taskId);
+    task = new Task(task);
+    await task.DeleteByUser(req.session.user.uid);
+    res.redirect("/");
+  }
+});
+
 /* router.post("/editname/:noteId", async (req, res) => {
   if (!req.session.loggedIn) {
     res.redirect("/login");

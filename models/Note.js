@@ -1,4 +1,6 @@
 const db = require("../modules/db");
+const UserRepo = require("../repos/UserRepository");
+const users = new UserRepo(db);
 const NoteRepo = require("../repos/NoteRepository");
 const notes = new NoteRepo(db);
 const TaskRepo = require("../repos/TaskRepository");
@@ -9,7 +11,7 @@ class Note {
   constructor(note) {
     this.nid = note.nid;
     this.owner = note.owner;
-    if (note.creationDate instanceof Date){
+    if (note.creationDate instanceof Date) {
       this.creationDate = note.creationDate;
     } else {
       this.creationDate = new Date(note.creationDate * 1000);

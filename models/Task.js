@@ -22,8 +22,16 @@ class Task {
   async UpdateByUser(uid, checked, description) {
     let noteWithPerms = await notes.CheckEditPerm(uid, this.nid);
     if (noteWithPerms?.nid) {
-      console.log(this.tid, uid, checked, description);
       return await tasks.Update(this.tid, checked, description, uid);
+    }
+    return null;
+  }
+
+  async DeleteByUser(uid) {
+    let noteWithPerms = await notes.CheckDeletePerm(uid, this.nid);
+    if (noteWithPerms?.nid) {
+      console.log(this.tid, uid);
+      return await tasks.DeleteTask(this.tid);
     }
     return null;
   }
