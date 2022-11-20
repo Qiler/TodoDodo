@@ -13,9 +13,25 @@ router.get("/", async (req, res) => {
 router.post("/submit", async (req, res) => {
   try {
     console.log(req.body);
+    if (req.body.username === "" || req.body.username === undefined || req.body.username === null) {
+      throw "Invalid Username.";
+    }
+
+    if (!req.body.username.match(/^[A-Za-z0-9_-]+$/)) {
+      throw "Invalid characters in Username.";
+    }
+
     let dbUser = await users.GetByUsername(req.body.username);
     if (dbUser?.username != undefined) {
       throw "Username already in use.";
+    }
+
+    if (req.body.email === "" || req.body.email === undefined || req.body.email === null) {
+      throw "Invalid Email.";
+    }
+
+    if (!req.body.email.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/)) {
+      throw "Invalid Email format.";
     }
 
     dbUser = await users.GetByEmail(req.body.email);

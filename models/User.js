@@ -26,11 +26,8 @@ class User {
   }
 
   async CreateNote(name, color = "#feff9c") {
-    let note = await notes.AddNote(this.uid, name, color);
-    await notes.AddFullAccess(note.nid, this.uid);
-    return note;
+    return await notes.AddNote(this.uid, name, color);
   }
 }
 
 module.exports = User;
-//TODO add functionality to user class to implement database

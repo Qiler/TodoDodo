@@ -39,6 +39,7 @@ app.use(
 
 app.use("/", require("./routes/index"));
 app.use("/login", require("./routes/login"));
+app.use("/logout", require("./routes/logout"));
 app.use("/register", require("./routes/register"));
 app.use("/note", require("./routes/note"));
 app.use("/task", require("./routes/task"));

@@ -35,7 +35,7 @@ class TaskRepository {
 
   async Update(tid, checked, description, checkedBy) {
     if (checked == true) {
-      await this.db.runAsync("UPDATE tasks SET checkedBy = ?, finishedDate = CURRENT_TIMESTAMP WHERE tid = ?", [checkedBy, tid]);
+      await this.db.runAsync("UPDATE tasks SET checkedBy = ?, finishedDate = ((strftime('%s') + (strftime('%f') - strftime('%S'))) * 1000) WHERE tid = ?", [checkedBy, tid]);
     }
     return await this.db.runAsync("UPDATE tasks SET description = ?, checked = ? WHERE tid = ?", [description, checked, tid]);
   }

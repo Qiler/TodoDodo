@@ -11,13 +11,10 @@ class Note {
   constructor(note) {
     this.nid = note.nid;
     this.owner = note.owner;
-    if (note.creationDate instanceof Date) {
-      this.creationDate = note.creationDate;
-    } else {
-      this.creationDate = new Date(note.creationDate * 1000);
-    }
+    this.creationDate = note.creationDate;
     this.name = note.name;
     this.color = note.color;
+    this.users = [];
   }
 
   async GetTasks() {
@@ -39,7 +36,7 @@ class Note {
   }
 
   async DeleteByUser(uid) {
-    let noteWithPerms = await notes.CheckDeletePerm(uid, this.nid);
+    let noteWithPerms = await notes.CheckPermissions(this.nid, uid);
     if (noteWithPerms?.nid) {
       return await notes.DeleteNote(noteWithPerms.nid);
     }
@@ -47,14 +44,30 @@ class Note {
   }
 
   async ChangeTitleByUser(uid, name) {
-    let noteWithPerms = await notes.CheckEditPerm(uid, this.nid);
+    let noteWithPerms = await notes.CheckPermissions(this.nid, uid);
     if (noteWithPerms?.nid) {
       return await notes.UpdateName(noteWithPerms.nid, name);
     }
     return null;
   }
 
-  // ADD more stuff here
+  async ShareWith(uid, userid) {
+    console.log(uid, userid, this.nid);
+    let noteWithPerms = await notes.CheckOwnership(this.nid, uid);
+    console.log(noteWithPerms);
+    if (noteWithPerms?.nid) {
+      return await notes.LinkUser(this.nid, userid);
+    }
+    return null;
+  }
+
+  async RemoveAccess(uid, userid) {
+    let noteWithPerms = await notes.CheckOwnership(this.nid, uid);
+    if (noteWithPerms?.nid) {
+      return await notes.RemoveAccess(this.nid, userid);
+    }
+    return null;
+  }
 }
 
 module.exports = Note;

@@ -1,0 +1,28 @@
+const db = require("../modules/db");
+const UserRepo = require("../repos/UserRepository");
+const users = new UserRepo(db);
+const Note = require("../models/Note");
+
+class NoteDto extends Note{
+  constructor(note){
+    super(note)
+    this.nid = note.nid;
+    this.ownerId = note.owner;
+    this.owner = "Unknown user";
+    if (note.creationDate instanceof Date) {
+      this.creationDate = note.creationDate;
+    } else {
+      this.creationDate = new Date(note.creationDate);
+    }
+    this.name = note.name;
+    this.color = note.color;
+    this.users = []
+  }
+
+  async Init(){
+    this.owner = (await users.GetByUid(this.ownerId)).username;
+    this.users = (await users.GetByNoteAccess(this.nid));
+  }
+}
+
+module.exports = NoteDto;

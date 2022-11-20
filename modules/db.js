@@ -1,11 +1,6 @@
 const sqlite3 = require("sqlite3").verbose();
-const fs = require("fs");
-//initDB();
 
-const db = new sqlite3.Database("./todododo.db", sqlite3.OPEN_READWRITE, (err) => {
-  if (err) return console.error(err.message);
-  console.log("DB Loaded");
-});
+db = new sqlite3.Database("./todododo.db");
 
 db.queryAsync = function (sql, params) {
   var that = this;
@@ -27,72 +22,61 @@ db.runAsync = function (sql, params) {
   });
 };
 
-async function initDB() {
-  await fs.open("todododo.db", "w", (err, fd) => {
-    if (err) console.error(err);
-    if (fd != null) fs.close(fd);
-  });
-
+db.serialize(async function () {
+  await db.runAsync("PRAGMA foreign_keys = ON");
   //USERS
   await db.runAsync(`CREATE TABLE IF NOT EXISTS users (
-    uid          INTEGER PRIMARY KEY
-                         AUTOINCREMENT,
+    uid          INTEGER PRIMARY KEY ON CONFLICT IGNORE AUTOINCREMENT,
     username     STRING  UNIQUE
-                         NOT NULL,
+                         NOT NULL
+                         COLLATE NOCASE,
     email        STRING  UNIQUE
-                         NOT NULL,
+                         NOT NULL
+                         COLLATE NOCASE,
     password     STRING  NOT NULL,
-    creationDate INTEGER DEFAULT (strftime('%s')),
-    lastLogin    INTEGER DEFAULT (strftime('%s')),
+    creationDate INTEGER DEFAULT ((strftime('%s')+(strftime('%f')-strftime('%S')))*1000),
+    lastLogin    INTEGER DEFAULT ((strftime('%s')+(strftime('%f')-strftime('%S')))*1000),
     active       BOOLEAN DEFAULT (true),
     avatar       STRING,
-    points       INTEGER DEFAULT (0)
-  );`);
+    points       INTEGER DEFAULT (0) 
+);
+`);
 
   //NOTES
   await db.runAsync(`CREATE TABLE IF NOT EXISTS notes (
-    nid          INTEGER PRIMARY KEY
-                         AUTOINCREMENT,
-    owner                REFERENCES users (uid)
-                         ON DELETE CASCADE
+    nid          INTEGER PRIMARY KEY ON CONFLICT IGNORE AUTOINCREMENT,
+    owner                REFERENCES users (uid) ON DELETE CASCADE
                          NOT NULL,
-    creationDate INTEGER DEFAULT (strftime('%s')),
+    creationDate INTEGER DEFAULT ((strftime('%s')+(strftime('%f')-strftime('%S')))*1000),
     name         STRING,
-    color        STRING   DEFAULT ('#feff9c') 
-  );`);
+    color        STRING  DEFAULT ('#feff9c') 
+);
+`);
 
   //TASKS
   await db.runAsync(`CREATE TABLE IF NOT EXISTS tasks (
-    tid          INTEGER  PRIMARY KEY
-                          AUTOINCREMENT,
-    nid                   REFERENCES notes (nid)
-                          ON DELETE CASCADE
-                          NOT NULL,
-    creationDate INTEGER DEFAULT (strftime('%s')),
+    tid          INTEGER PRIMARY KEY ON CONFLICT IGNORE AUTOINCREMENT,
+    nid                  REFERENCES notes (nid) ON DELETE CASCADE
+                         NOT NULL,
+    creationDate INTEGER DEFAULT ((strftime('%s')+(strftime('%f')-strftime('%S')))*1000),
     dueDate      INTEGER,
     finishedDate INTEGER,
     checked      BOOLEAN,
-    checkedBy    INTEGER  REFERENCES users (uid)
-                          ON DELETE NO ACTION,
-    description  STRING,
-    importance   INTEGER  DEFAULT (1),
-    color        STRING   DEFAULT ('#002b59'),
-    [order]      INTEGER
-  );`);
+    checkedBy    INTEGER REFERENCES users (uid) ON DELETE NO ACTION,
+    description  STRING
+);
+`);
 
   //USER NOTES
   await db.runAsync(`CREATE TABLE IF NOT EXISTS userNotes (
-    nid                   REFERENCES notes (nid)
-                          ON DELETE CASCADE
-                          NOT NULL,
-    uid                   REFERENCES users (uid)
-                          ON DELETE CASCADE
-                          NOT NULL,
-    editPerm     BOOLEAN  DEFAULT (false),
-    deletePerm   BOOLEAN  DEFAULT (false),
-    taskPerm     BOOLEAN  DEFAULT (false),
-    sharePerm    BOOLEAN  DEFAULT (false)
-  );`);
-}
+    link    STRING  PRIMARY KEY ON CONFLICT IGNORE,
+    nid             REFERENCES notes (nid) ON DELETE CASCADE
+                    NOT NULL,
+    uid             REFERENCES users (uid) ON DELETE CASCADE
+                    NOT NULL,
+    isOwner BOOLEAN DEFAULT (false) 
+);
+`);
+});
 
 module.exports = db;

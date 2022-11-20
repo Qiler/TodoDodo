@@ -2,7 +2,7 @@
   <div class="container">
     <% notes.forEach(note => { %>
       <div class="sticky" style="z-index: <%= notesCount-- %>" id="sticky-<%= note.nid %>" data-nid="<%= note.nid %>">
-        <div class="sticky-container">
+        <div class="sticky-container" style="background-color: <%= note.color %>">
           <div class="sticky-footer">
             <form action="/note/editname/<%= note.nid %>" autocomplete="off" method="POST">
               <input class="sticky-title" name="name" type="text" value="<%= note.name %>" autocomplete="false" />
@@ -40,6 +40,23 @@
             <span class="bold">Owner: </span><%= note.owner %><br/>
             <span class="bold">Creation date: </span><script>document.write( new Date("<%= note.creationDate.toISOString() %>").toLocaleString() )</script><br/>
             <span class="bold">Color: </span><input type="color" class="sticky-color" id="sticky-color-<%= note.nid %>" name="color" value="<%= note.color %>">
+            <div class="share-with">
+              <span class="bold">Shared note with:</span>
+              <form class="share-with-form" action="/note/share/<%= note.nid %>" method="POST">
+                <button type="submit"><i class="mdi mdi-plus"></i></button>
+                <input name="user" type="text">
+              </form>
+            </div>
+            <% note.users?.forEach(user => { %>
+            <div class="shared-with">
+              <div class="shared-with-avatar"></div>
+              <form action="/note/removeaccess/<%= note.nid %>" method="POST">
+                <input type="hidden" name="user" value="<%= user.username %>">
+                <button class="shared-with-button" type="submit"><i class="mdi mdi-close"></i></button>
+              </form>
+              <span class="shared-with-username"><%= user.username %></span>
+            </div>
+            <% }) %>
           </div>
         </div>
       </div>

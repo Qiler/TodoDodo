@@ -18,56 +18,47 @@ class NoteRepository {
     return result?.rows;
   }
 
-  async CheckEditPerm(uid, nid) {
-    const result = await this.db.queryAsync(
-      `SELECT * FROM notes 
-                LEFT JOIN userNotes ON notes.nid = userNotes.nid
-                WHERE userNotes.uid = ? AND userNotes.nid = ? AND userNotes.editPerm = true
-                LIMIT 1;`,
-      [uid, nid]
-    );
-    return result?.rows[0];
-  }
-
-  async CheckDeletePerm(uid, nid) {
-    const result = await this.db.queryAsync(
-      `SELECT * FROM notes
-                LEFT JOIN userNotes ON notes.nid = userNotes.nid
-                WHERE userNotes.uid = ? AND userNotes.nid = ? AND userNotes.deletePerm = true
-                LIMIT 1;`,
-      [uid, nid]
-    );
-    return result?.rows[0];
-  }
-
-  async CheckTaskPerm(uid, nid) {
-    const result = await this.db.queryAsync(
-      `SELECT * FROM notes
-                LEFT JOIN userNotes ON notes.nid = userNotes.nid
-                WHERE userNotes.uid = ? AND userNotes.nid = ? AND userNotes.taskPerm = true
-                LIMIT 1;`,
-      [uid, nid]
-    );
-    return result?.rows[0];
-  }
-
-  async CheckSharePerm(uid, nid) {
-    const result = await this.db.queryAsync(
-      `SELECT * FROM notes
-                LEFT JOIN userNotes ON notes.nid = userNotes.nid
-                WHERE userNotes.uid = ? AND userNotes.nid = ? AND userNotes.sharePerm = true
-                LIMIT 1;`,
-      [uid, nid]
-    );
-    return result?.rows[0];
-  }
-
   async AddNote(uid, name, color) {
     const result = await this.db.queryAsync("INSERT INTO notes (owner,name,color) VALUES (?,?,?) RETURNING nid;", [uid, name, color]);
     if (result && result.rows && result.rows[0]) {
+      const link = [uid, result.rows[0].nid].join("-");
+      await this.db.runAsync("INSERT INTO userNotes (link,nid,uid,isOwner) VALUES (?,?,?,?);", [link, result.rows[0].nid, uid, true]);
       return result.rows[0];
     }
     return null;
+  }
+
+  async CheckPermissions(nid, uid) {
+    const result = await this.db.queryAsync(
+      `SELECT * FROM notes 
+                LEFT JOIN userNotes ON notes.nid = userNotes.nid
+                WHERE userNotes.uid = ? AND userNotes.nid = ?
+                LIMIT 1;`,
+      [uid, nid]
+    );
+    return result?.rows[0];
+  }
+
+  async CheckOwnership(nid, uid) {
+    console.log(nid, uid);
+    const result = await this.db.queryAsync(
+      `SELECT * FROM notes 
+                LEFT JOIN userNotes ON notes.nid = userNotes.nid
+                WHERE userNotes.uid = ? AND userNotes.nid = ? AND userNotes.isOwner = true
+                LIMIT 1;`,
+      [uid, nid]
+    );
+    console.log(result?.rows[0]);
+    return result?.rows[0];
+  }
+
+  async LinkUser(nid, uid) {
+    const link = [uid, nid].join("-");
+    return await this.db.runAsync("INSERT INTO userNotes (link,nid,uid,isOwner) VALUES (?,?,?,?);", [link, nid, uid, false]);
+  }
+
+  async RemoveAccess(nid, uid) {
+    return await this.db.runAsync("DELETE FROM userNotes WHERE nid = ? AND uid = ? and userNotes.isOwner = false;", [nid, uid]);
   }
 
   async DeleteNote(nid) {
@@ -80,34 +71,6 @@ class NoteRepository {
 
   async UpdateColor(nid, color) {
     return await this.db.runAsync("UPDATE notes SET color = ? WHERE nid = ?;", [color, nid]);
-  }
-
-  async AddAccess(nid, uid) {
-    return await this.db.runAsync("INSERT INTO userNotes (nid,uid) VALUES (?,?);", [nid, uid]);
-  }
-
-  async AddFullAccess(nid, uid) {
-    return await this.db.runAsync("INSERT INTO userNotes (nid,uid,editPerm,deletePerm,taskPerm,sharePerm) VALUES (?,?,true,true,true,true);", [nid, uid]);
-  }
-
-  async RemoveAccess(nid, uid) {
-    return await this.db.runAsync("DELETE FROM userNotes WHERE nid = ? AND uid = ?;", [nid, uid]);
-  }
-
-  async UpdateEditPermission(nid, uid, value) {
-    return await this.db.runAsync("UPDATE userNotes SET editPerm ? WHERE nid = ? AND uid = ?;", [value, nid, uid]);
-  }
-
-  async UpdateDeletePermission(nid, uid, value) {
-    return await this.db.runAsync("UPDATE userNotes SET deletePerm ? WHERE nid = ? AND uid = ?;", [value, nid, uid]);
-  }
-
-  async UpdateTaskPermission(nid, uid, value) {
-    return await this.db.runAsync("UPDATE userNotes SET taskPerm ? WHERE nid = ? AND uid = ?;", [value, nid, uid]);
-  }
-
-  async UpdateSharePermission(nid, uid, value) {
-    return await this.db.runAsync("UPDATE userNotes SET sharePerm ? WHERE nid = ? AND uid = ?;", [value, nid, uid]);
   }
 }
 

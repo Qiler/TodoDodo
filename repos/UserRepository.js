@@ -32,6 +32,16 @@ class UserRepository {
     return null;
   }
 
+  async GetByNoteAccess(nid) {
+    const result = await this.db.queryAsync(
+      `SELECT * FROM users 
+                LEFT JOIN userNotes ON users.uid = userNotes.uid
+                WHERE userNotes.nid = ? AND userNotes.isOwner = false;`,
+      [nid]
+    );
+    return result?.rows;
+  }
+
   async AddUser(username, email, password) {
     const result = await this.db.queryAsync("INSERT INTO users (username,email,password) VALUES (?,?,?) RETURNING uid", [username, email, password]);
     if (result && result.rows && result.rows[0]) {

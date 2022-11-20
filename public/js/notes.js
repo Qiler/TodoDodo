@@ -19,6 +19,7 @@ $(".sticky").each(function () {
   });
 
   $(".task-description").keypress(function (event) {
+    console.log(event)
     const parent = $(this).parent();
     const textValue = parent.find(".task-description").first().text();
     parent.find(".task-description-hidden").first().val(textValue);
@@ -31,6 +32,12 @@ $(".sticky").each(function () {
   $(".task-form-delete-button").bind("click", function () {
     setTimeout(() => {
       $(this).parents(".task").remove();
+    }, 100);
+  });
+
+  $(".shared-with-button").bind("click", function () {
+    setTimeout(() => {
+      $(this).parents(".shared-with").remove();
     }, 100);
   });
 });
@@ -47,6 +54,18 @@ $(".sticky form").submit(function (evt) {
 });
 
 $(".sticky-add-form").submit(function (evt) {
+  setTimeout(() => {
+    document.location.reload();
+  }, 100);
+});
+
+$(".share-with-form").submit(function (evt) {
+  setTimeout(() => {
+    document.location.reload();
+  }, 100);
+});
+
+$(".sticky-menu-content-delete-form").submit(function (evt) {
   setTimeout(() => {
     document.location.reload();
   }, 100);
