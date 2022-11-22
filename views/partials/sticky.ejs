@@ -16,10 +16,20 @@
                   <label class="task-checkbox-label" for="task-checkbox<%= task.tid %>">□</label>
                   <input class="task-description-hidden" name="description" type="hidden" value="<%= task.description %>">
                   <span class="task-description" type="text" role="textbox" contenteditable="true" value="<%= task.description %>" autocomplete="false"><%= task.description %></span>
+                  <time class="timeago task-finished-date" datetime="<%= task.finishedDate.getTime() == 0 ? '' : task.finishedDate.toUTCString().toLowerCase() %>"></time>
+                  <time class="timeago task-due-date" datetime="<%= task.dueDate.getTime() == 0 ? '' : task.dueDate.toUTCString().toLowerCase() %>"></time>
+                  <div class="task-description-padding"></div>
                 </form>
-                <form class="task-form-delete" action="/task/delete/<%= task.tid %>" data-tid="<%= task.tid %>" autocomplete="off" method="POST">
-                  <button class="task-form-delete-button" type="submit"><i class="mdi mdi-trash-can"></i></button>
-                </form>
+                <button class="task-menu-button"><i class="mdi mdi-cog"></i></button>
+                <div class="task-menu-content">
+                  <form action="/task/delete/<%= task.tid %>" method="POST">
+                    <button class="sticky-menu-content-delete-button" type="submit">Delete task</button>
+                  </form>
+                  <span class="bold">Task due date:</span>
+                  <form action="/task/setdue/<%= task.tid %> ">
+                    <input class="flatpickr flatpickr-input active" type="text" placeholder="Select Date.." data-id="datetime" readonly="readonly">
+                  </form>
+                </div>
               </div>
             <% }) %>
           </div>
@@ -33,13 +43,17 @@
             <div class="sticky-menu-button-bars"></div>
             <div class="sticky-menu-button-bars"></div>
           </div>
-          <div class="sticky-menu-content">
+          <div class="sticky-menu-content hidden">
             <form class="sticky-menu-content-delete-form" action="/note/delete/<%= note.nid %>" method="POST">
               <button class="sticky-menu-content-delete-button" type="submit">Delete note</button>
             </form>
             <span class="bold">Owner: </span><%= note.owner %><br/>
             <span class="bold">Creation date: </span><script>document.write( new Date("<%= note.creationDate.toISOString() %>").toLocaleString() )</script><br/>
-            <span class="bold">Color: </span><input type="color" class="sticky-color" id="sticky-color-<%= note.nid %>" name="color" value="<%= note.color %>">
+            <form class="color-form" action="/note/editcolor/<%= note.nid %>" method="POST">
+              <span class="bold">Color: </span>
+              <input name="color" class="color-form-input" type="hidden"/>
+              <button class="sticky-color-button" value="<%= note.color %>" data-jscolor="{ value:'<%= note.color %>' }"></button>
+            </form>
             <div class="share-with">
               <span class="bold">Shared note with:</span>
               <form class="share-with-form" action="/note/share/<%= note.nid %>" method="POST">
@@ -51,7 +65,7 @@
             <div class="shared-with">
               <div class="shared-with-avatar"></div>
               <form action="/note/removeaccess/<%= note.nid %>" method="POST">
-                <input type="hidden" name="user" value="<%= user.username %>">
+                <input type="hidden" name="userid" value="<%= user.uid %>">
                 <button class="shared-with-button" type="submit"><i class="mdi mdi-close"></i></button>
               </form>
               <span class="shared-with-username"><%= user.username %></span>
@@ -61,5 +75,13 @@
         </div>
       </div>
     <% }) %>
+    <form action="/note/create" method="post" class="add-note-form">
+      <button type="submit" class="add-note-button">
+        <div class="add-note-button-plus">
+          <div class="add-note-button-plus-dash"></div>
+          <div class="add-note-button-plus-dash"></div>
+        </div>
+      </button>
+    </form>
   </div>
 </div>

@@ -12,7 +12,6 @@ router.get("/", async (req, res) => {
 
 router.post("/submit", async (req, res) => {
   try {
-    console.log(req.body);
     if (req.body.username === "" || req.body.username === undefined || req.body.username === null) {
       throw "Invalid Username.";
     }
@@ -41,7 +40,6 @@ router.post("/submit", async (req, res) => {
 
     let password = await bcrypt.hash(req.body.password, 10);
 
-    console.log(req.body.username, req.body.email, password);
     await users.AddUser(req.body.username, req.body.email, password);
     dbUser = await users.GetByUsername(req.body.username);
     if (dbUser?.username == undefined) {

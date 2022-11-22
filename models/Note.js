@@ -51,10 +51,17 @@ class Note {
     return null;
   }
 
+  
+  async ChangeColorByUser(uid, color) {
+    let noteWithPerms = await notes.CheckPermissions(this.nid, uid);
+    if (noteWithPerms?.nid) {
+      return await notes.UpdateColor(noteWithPerms.nid, color);
+    }
+    return null;
+  }
+
   async ShareWith(uid, userid) {
-    console.log(uid, userid, this.nid);
     let noteWithPerms = await notes.CheckOwnership(this.nid, uid);
-    console.log(noteWithPerms);
     if (noteWithPerms?.nid) {
       return await notes.LinkUser(this.nid, userid);
     }

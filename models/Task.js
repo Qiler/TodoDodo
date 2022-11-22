@@ -30,7 +30,6 @@ class Task {
   async DeleteByUser(uid) {
     let noteWithPerms = await notes.CheckPermissions(this.nid, uid);
     if (noteWithPerms?.nid) {
-      console.log(this.tid, uid);
       return await tasks.DeleteTask(this.tid);
     }
     return null;

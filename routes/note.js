@@ -26,6 +26,17 @@ router.post("/editname/:noteId", async (req, res) => {
   }
 });
 
+router.post("/editcolor/:noteId", async (req, res) => {
+  if (!req.session.loggedIn) {
+    res.redirect("/login");
+  } else {
+    req.params.noteId = parseInt(req.params.noteId);
+    let note = new Note({ nid: req.params.noteId });
+    await note.ChangeColorByUser(req.session.user.uid, req.body.color);
+    res.redirect("/");
+  }
+});
+
 router.post("/delete/:noteId", async (req, res) => {
   if (!req.session.loggedIn) {
     res.redirect("/login");
@@ -37,20 +48,19 @@ router.post("/delete/:noteId", async (req, res) => {
   }
 });
 
-router.post("/removeaccess", async (req, res) => {
+router.post("/removeaccess/:noteId", async (req, res) => {
   if (!req.session.loggedIn) {
     res.redirect("/login");
   } else {
-    req.params.noteid = parseInt(req.params.noteid);
-    req.params.userid = parseInt(req.params.userid);
-    let note = new Note({ nid: req.params.noteid });
-    await note.RemoveAccess(req.params.userid);
+    req.params.noteId = parseInt(req.params.noteId);
+    req.body.userid = parseInt(req.body.userid);
+    let note = new Note({ nid: req.params.noteId });
+    await note.RemoveAccess(req.session.user.uid, req.body.userid);
     res.redirect("/");
   }
 });
 
 router.post("/share/:noteId", async (req, res) => {
-  console.log(req.params);
   if (!req.session.loggedIn) {
     res.redirect("/login");
   } else {
@@ -58,7 +68,6 @@ router.post("/share/:noteId", async (req, res) => {
     await user.FindByName(req.body.user);
     req.params.noteId = parseInt(req.params.noteId);
     let note = new Note({ nid: req.params.noteId });
-    console.log(note);
     await note.ShareWith(req.session.user.uid, user.uid);
     res.redirect("/");
   }

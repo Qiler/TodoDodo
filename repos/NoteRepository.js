@@ -40,7 +40,6 @@ class NoteRepository {
   }
 
   async CheckOwnership(nid, uid) {
-    console.log(nid, uid);
     const result = await this.db.queryAsync(
       `SELECT * FROM notes 
                 LEFT JOIN userNotes ON notes.nid = userNotes.nid
@@ -48,7 +47,6 @@ class NoteRepository {
                 LIMIT 1;`,
       [uid, nid]
     );
-    console.log(result?.rows[0]);
     return result?.rows[0];
   }
 

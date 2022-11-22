@@ -18,6 +18,7 @@
   --green: rgb(80, 139, 80);
   --red: hsl(0, 67%, 37%);
   --lightgreen: hsl(120, 27%, 60%);
+  --lightred: hsl(0, 41%, 49%);
   --black: black;
   --white: white;
 }
@@ -279,6 +280,51 @@ main {
   break-inside: avoid;
 }
 
+.add-note-form {
+  max-width: 30rem;
+  margin-bottom: 1rem;
+  break-inside: avoid;
+}
+
+.add-note-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 20rem;
+  width: 100%;
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+}
+
+.add-note-button:hover .add-note-button-plus{
+  scale: 1.1;
+  opacity: 60%;
+}
+
+.add-note-button-plus {
+  background-color: rgb(0, 0, 0);
+  border-radius: 50%;
+  height: 5rem;
+  width: 5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 50%;
+}
+
+.add-note-button-plus-dash{
+  background-color: rgb(255, 255, 255);
+  height: 3.5rem;
+  width: 0.7rem;
+  position: absolute;
+  border-radius: 0.3rem;
+}
+
+.add-note-button-plus-dash:nth-child(1){
+  rotate: 90deg;
+}
+
 .sticky-container {
   background-color: var(--sticky4);
   /* -webkit-mask-image: url("/images/sticky-mask.svg"); */
@@ -326,6 +372,7 @@ main {
   display: flex;
   flex-direction: column;
   justify-content: space-evenly;
+  cursor: pointer;
 }
 
 .sticky-menu-button-bars {
@@ -340,23 +387,26 @@ main {
   position: absolute;
   background: rgba(255, 255, 255, 1);
   border: solid black 1px;
-  border-radius: 0.5rem;
+  /* border-radius: 0.5rem; */
   padding: 1rem;
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-  display: none;
-  top: 0rem;
+  top: 1.6rem;
   right: -1rem;
   white-space: nowrap;
   break-inside: avoid;
   overflow: hidden;
 }
 
-.sticky-menu:hover > .sticky-menu-content {
+/* .sticky-menu:hover > .sticky-menu-content {
   display: inline-block;
-}
+} */
 
 .sticky-menu .bold {
   font-weight: 900;
+}
+
+.sticky-menu span {
+  user-select: none;
 }
 
 .sticky-menu .sticky-color {
@@ -367,6 +417,18 @@ main {
   border: none;
   -webkit-appearance: none;
   translate: 0 0.2rem;
+  display: inline-block;
+}
+
+.sticky-menu .sticky-color-button {
+  border: solid black 1px;
+  cursor: pointer;
+  aspect-ratio: 1;
+  cursor: pointer;
+}
+
+.sticky-menu .sticky-color-button:hover {
+  filter: brightness(130%);
 }
 
 .sticky-menu-content-delete-form {
@@ -379,10 +441,11 @@ main {
   padding: 0;
   margin: 0;
   border: none;
-  color: darkred;
+  color: var(--red);
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   font-weight: 900;
   background-color: transparent;
+  cursor: pointer;
 }
 
 .share-with-form {
@@ -403,6 +466,11 @@ main {
   height: 1.5rem;
   width: 1.5rem;
   border: solid black 1px;
+  cursor: pointer;
+}
+
+.share-with-form button:hover {
+  background-color: var(--lightgreen);
 }
 
 .share-with-form button i {
@@ -413,7 +481,7 @@ main {
   display: flex;
 }
 
-.shared-with form button{
+.shared-with form button {
   background-color: var(--red);
   border: none;
   margin: 0;
@@ -422,6 +490,11 @@ main {
   width: 1.5rem;
   border: solid black 1px;
   margin-right: 0.2rem;
+  cursor: pointer;
+}
+
+.shared-with form button:hover {
+  background-color: var(--lightred);
 }
 
 .shared-with-username {
@@ -446,6 +519,7 @@ main {
 
 .task-form {
   display: flex;
+  flex-wrap: wrap;
 }
 
 .task-form:after {
@@ -501,34 +575,92 @@ main {
   width: calc(100% - 2rem);
   font: 20px "Travel October", sans-serif;
   display: inline-block;
+  overflow: hidden;
 }
 
-.task-checkbox:checked + .task-checkbox-label + input + .task-description {
+.task-description-padding {
+  flex-basis: 100%;
+  height: 0.5rem;
+}
+
+.task-checkbox:not(:checked) ~ .task-due-date[datetime=""] + .task-description-padding{
+  height: 0rem;
+}
+
+.task-due-date {
+  font: 12px "Travel October", sans-serif;
+  display: block;
+  position: absolute;
+  right: 0;
+  bottom: -0.2rem;
+}
+
+.task-due-date:not([datetime=""]):before {
+  content: "Due in ";
+}
+
+.task-finished-date:not([datetime=""]):before {
+  content: "Finished ";
+}
+
+.task-checkbox:checked ~ .task-due-date {
+  display: none;
+}
+
+.task-finished-date {
+  font: 12px "Travel October", sans-serif;
+  display: none;
+  position: absolute;
+  right: 0;
+  bottom: -0.2rem;
+  color: rgb(56, 56, 56);
+}
+
+.task-checkbox:checked ~ .task-finished-date {
+  display: block;
+}
+
+.task-checkbox:checked ~ .task-description {
   text-decoration: line-through;
   color: rgb(56, 56, 56);
 }
 
-.task-form-delete {
+.task-menu-button {
+  background-color: transparent;
+  border: none;
+  padding: 0;
+  margin: 0;
+  cursor: pointer;
   position: absolute;
   top: 0.16rem;
   right: 0;
   display: none;
 }
 
-.task:hover > .task-form-delete {
+.task:hover > .task-menu-button {
   display: block;
 }
 
-.task-form-delete-button {
-  background-color: transparent;
-  border: none;
-  padding: 0;
-  margin: 0;
-  cursor: pointer;
-  top: 0;
+.task-menu-button i:hover {
+  color: rgb(59, 59, 59);
 }
-.task-form-delete-button i {
+
+.task-menu-button i {
   font-size: 1rem;
+}
+
+.task-menu-content {
+  position: absolute;
+  background: rgb(255, 255, 255);
+  border: solid black 1px;
+  /* border-radius: 0.5rem; */
+  padding: 1rem;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  top: -1rem;
+  right: -1rem;
+  white-space: nowrap;
+  break-inside: avoid;
+  overflow: hidden;
 }
 
 .sticky-add {
