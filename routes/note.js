@@ -49,6 +49,8 @@ router.post("/delete/:noteId", async (req, res) => {
 });
 
 router.post("/removeaccess/:noteId", async (req, res) => {
+  console.log(req.params);
+  console.log(req.body);
   if (!req.session.loggedIn) {
     res.redirect("/login");
   } else {

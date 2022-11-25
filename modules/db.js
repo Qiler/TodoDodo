@@ -45,7 +45,7 @@ db.serialize(async function () {
   //NOTES
   await db.runAsync(`CREATE TABLE IF NOT EXISTS notes (
     nid          INTEGER PRIMARY KEY ON CONFLICT IGNORE AUTOINCREMENT,
-    owner                REFERENCES users (uid) ON DELETE CASCADE
+    ownerId              REFERENCES users (uid) ON DELETE CASCADE
                          NOT NULL,
     creationDate INTEGER DEFAULT ((strftime('%s')+(strftime('%f')-strftime('%S')))*1000),
     name         STRING,
@@ -61,6 +61,7 @@ db.serialize(async function () {
     creationDate INTEGER DEFAULT ((strftime('%s')+(strftime('%f')-strftime('%S')))*1000),
     dueDate      INTEGER,
     finishedDate INTEGER,
+    addedBy      INTEGER REFERENCES users (uid) ON DELETE NO ACTION,
     checked      BOOLEAN,
     checkedBy    INTEGER REFERENCES users (uid) ON DELETE NO ACTION,
     description  STRING

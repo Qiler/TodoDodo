@@ -1,0 +1,31 @@
+<div class="sticky-menu-content hidden">
+  <form class="sticky-menu-content-delete-form" action="/note/delete/" method="POST">
+    <button class="sticky-menu-content-delete-button" type="submit">Delete note</button>
+  </form>
+  <span class="bold">Owner: </span><span class="note-owner"></span><br/>
+  <span class="bold">Creation date: </span><span class="note-creation-date"></span><br/>
+  <form class="color-form" action="/" method="POST">
+    <span class="bold">Color: </span>
+    <input name="color" class="color-form-input" type="hidden"/>
+    <button class="sticky-color-button" data-jscolor=""></button>
+  </form>
+  <div class="share-with">
+    <span class="bold">Shared note with:</span>
+    <form class="share-with-form" action="/note/share/" method="POST">
+      <button type="submit"><i class="mdi mdi-plus"></i></button>
+      <input name="user" type="text">
+    </form>
+  </div>
+  <div class="shared-with">
+  </div>
+</div>
+<div class="task-menu-content hidden">
+  <form class="task-menu-content-delete-form" action="/task/delete/ task.tid " method="POST">
+    <button class="task-menu-content-delete-button" type="submit">Delete task</button>
+  </form>
+  <div class="task-menu-content-users"></div>
+  <span class="bold">Task due date: </span><span class="task-menu-due-date"></span>
+  <form class="task-menu-content-duedate-form" action="/" method="POST">
+    <input class="flatpickr flatpickr-input active" type="text" placeholder="Select Date.." data-id="datetime" readonly="readonly">
+  </form>
+</div>

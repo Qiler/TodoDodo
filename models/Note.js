@@ -9,11 +9,11 @@ const Task = require("../models/Task");
 
 class Note {
   constructor(note) {
-    this.nid = note.nid;
-    this.owner = note.owner;
-    this.creationDate = note.creationDate;
-    this.name = note.name;
-    this.color = note.color;
+    this.nid = note?.nid;
+    this.ownerId = note?.ownerId;
+    this.creationDate = note?.creationDate;
+    this.name = note?.name;
+    this.color = note?.color;
     this.users = [];
   }
 
@@ -27,8 +27,8 @@ class Note {
     return taskArray;
   }
 
-  async CreateTask(description) {
-    return await tasks.AddTask(this.nid, description);
+  async CreateTask(uid, description) {
+    return await tasks.AddTask(this.nid, uid, description);
   }
 
   async Delete() {
@@ -51,7 +51,6 @@ class Note {
     return null;
   }
 
-  
   async ChangeColorByUser(uid, color) {
     let noteWithPerms = await notes.CheckPermissions(this.nid, uid);
     if (noteWithPerms?.nid) {
@@ -74,6 +73,11 @@ class Note {
       return await notes.RemoveAccess(this.nid, userid);
     }
     return null;
+  }
+
+  async CheckPermissions(uid) {
+    let permissions = await notes.CheckOwnership(this.nid, uid);
+    return permissions;
   }
 }
 

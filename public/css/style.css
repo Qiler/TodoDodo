@@ -261,13 +261,14 @@ main {
   -webkit-columns: 8 25rem;
   columns: 8 25rem;
   column-gap: 1rem;
+  overflow: visible;
 }
 
-@media screen and (max-width: 600px) {
+/* @media screen and (max-width: 600px) {
   .container {
     margin: 1rem;
   }
-}
+} */
 
 .sticky {
   /*   background-color: var(--sticky5); */
@@ -390,8 +391,7 @@ main {
   /* border-radius: 0.5rem; */
   padding: 1rem;
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-  top: 1.6rem;
-  right: -1rem;
+  z-index: 1001;
   white-space: nowrap;
   break-inside: avoid;
   overflow: hidden;
@@ -401,7 +401,7 @@ main {
   display: inline-block;
 } */
 
-.sticky-menu .bold {
+.bold {
   font-weight: 900;
 }
 
@@ -409,25 +409,13 @@ main {
   user-select: none;
 }
 
-.sticky-menu .sticky-color {
-  padding: 0;
-  margin: 0;
-  width: 1rem;
-  height: 1rem;
-  border: none;
-  -webkit-appearance: none;
-  translate: 0 0.2rem;
-  display: inline-block;
-}
-
-.sticky-menu .sticky-color-button {
+.sticky-color-button {
   border: solid black 1px;
   cursor: pointer;
   aspect-ratio: 1;
-  cursor: pointer;
 }
 
-.sticky-menu .sticky-color-button:hover {
+.sticky-color-button:hover {
   filter: brightness(130%);
 }
 
@@ -437,7 +425,7 @@ main {
   border: none;
 }
 
-.sticky-menu-content-delete-button {
+.sticky-menu-content-delete-button, .task-menu-content-delete-button {
   padding: 0;
   margin: 0;
   border: none;
@@ -477,7 +465,7 @@ main {
   display: block;
 }
 
-.shared-with {
+.shared-with-container {
   display: flex;
 }
 
@@ -578,6 +566,11 @@ main {
   overflow: hidden;
 }
 
+.task-description:empty::before {
+  content: "Type your task here.";
+  color: rgba(0, 0, 0, 0.3);
+}
+
 .task-description-padding {
   flex-basis: 100%;
   height: 0.5rem;
@@ -634,11 +627,11 @@ main {
   position: absolute;
   top: 0.16rem;
   right: 0;
-  display: none;
+  opacity: 0;
 }
 
 .task:hover > .task-menu-button {
-  display: block;
+  opacity: 1;
 }
 
 .task-menu-button i:hover {
@@ -656,8 +649,7 @@ main {
   /* border-radius: 0.5rem; */
   padding: 1rem;
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-  top: -1rem;
-  right: -1rem;
+  z-index: 1001;
   white-space: nowrap;
   break-inside: avoid;
   overflow: hidden;

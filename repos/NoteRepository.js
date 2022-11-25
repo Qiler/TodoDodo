@@ -8,8 +8,13 @@ class NoteRepository {
     return result?.rows;
   }
 
+  async GetByNid(nid) {
+    const result = await this.db.queryAsync("SELECT * FROM notes WHERE nid = ? LIMIT 1;", [nid]);
+    return result?.rows[0];
+  }
+
   async GetByOwner(uid) {
-    const result = await this.db.queryAsync("SELECT * FROM notes WHERE owner = ?;", [uid]);
+    const result = await this.db.queryAsync("SELECT * FROM notes WHERE ownerId = ?;", [uid]);
     return result?.rows;
   }
 
@@ -19,7 +24,7 @@ class NoteRepository {
   }
 
   async AddNote(uid, name, color) {
-    const result = await this.db.queryAsync("INSERT INTO notes (owner,name,color) VALUES (?,?,?) RETURNING nid;", [uid, name, color]);
+    const result = await this.db.queryAsync("INSERT INTO notes (ownerId,name,color) VALUES (?,?,?) RETURNING nid;", [uid, name, color]);
     if (result && result.rows && result.rows[0]) {
       const link = [uid, result.rows[0].nid].join("-");
       await this.db.runAsync("INSERT INTO userNotes (link,nid,uid,isOwner) VALUES (?,?,?,?);", [link, result.rows[0].nid, uid, true]);

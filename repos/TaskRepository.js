@@ -21,8 +21,8 @@ class TaskRepository {
     return null;
   }
 
-  async AddTask(nid, description) {
-    const result = await this.db.queryAsync("INSERT INTO tasks (nid,description) VALUES (?,?) RETURNING tid", [nid, description]);
+  async AddTask(nid, addedBy, description) {
+    const result = await this.db.queryAsync("INSERT INTO tasks (nid,addedBy,description) VALUES (?,?,?) RETURNING tid", [nid, addedBy, description]);
     if (result && result.rows && result.rows[0]) {
       return result.rows[0];
     }
@@ -39,11 +39,15 @@ class TaskRepository {
     }
     return await this.db.runAsync("UPDATE tasks SET description = ?, checked = ? WHERE tid = ?", [description, checked, tid]);
   }
-
-  async UpdateDescription(tid, description) {
-    return await this.db.runAsync("UPDATE tasks SET description = ? WHERE tid = ?", [description, tid]);
+  
+  async UpdateDueDate(tid, date) {
+    return await this.db.runAsync("UPDATE tasks SET dueDate = ? WHERE tid = ?", [date, tid]);
   }
-
+  
+  async UpdateFinishedDate(tid, date) {
+    return await this.db.runAsync("UPDATE tasks SET finishedDate = ? WHERE tid = ?", [date, tid]);
+  }
+  
   async UpdateChecked(tid, checked) {
     return await this.db.runAsync("UPDATE tasks SET checked = ? WHERE tid = ?", [checked, tid]);
   }
@@ -52,25 +56,10 @@ class TaskRepository {
     return await this.db.runAsync("UPDATE tasks SET description = ? WHERE tid = ?", [uid, tid]);
   }
 
-  async UpdateImportance(tid, importance) {
-    return await this.db.runAsync("UPDATE tasks SET importance = ? WHERE tid = ?", [importance, tid]);
+  async UpdateDescription(tid, description) {
+    return await this.db.runAsync("UPDATE tasks SET description = ? WHERE tid = ?", [description, tid]);
   }
-
-  async UpdateColor(tid, color) {
-    return await this.db.runAsync("UPDATE tasks SET color = ? WHERE tid = ?", [color, tid]);
-  }
-
-  async UpdateDueDate(tid, date) {
-    return await this.db.runAsync("UPDATE tasks SET dueDate = ? WHERE tid = ?", [date, tid]);
-  }
-
-  async UpdateFinishedDate(tid, date) {
-    return await this.db.runAsync("UPDATE tasks SET finishedDate = ? WHERE tid = ?", [date, tid]);
-  }
-
-  async UpdateOrder(tid, order) {
-    return await this.db.runAsync("UPDATE tasks SET [order] = ? WHERE tid = ?", [order, tid]);
-  }
+  
 }
 
 module.exports = TaskRepository;

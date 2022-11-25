@@ -13,7 +13,7 @@ router.post("/create/:noteId", async (req, res) => {
   } else {
     req.params.noteId = parseInt(req.params.noteId);
     let note = new Note({ nid: req.params.noteId });
-    await note.CreateTask("Type task here");
+    await note.CreateTask(req.session.user.uid ,"");
     res.redirect("/");
   }
 });
@@ -42,27 +42,5 @@ router.post("/delete/:taskId", async (req, res) => {
     res.redirect("/");
   }
 });
-
-/* router.post("/editname/:noteId", async (req, res) => {
-  if (!req.session.loggedIn) {
-    res.redirect("/login");
-  } else {
-    req.params.noteId = parseInt(req.params.noteId);
-    let note = new Note({ nid: req.params.noteId });
-    await note.ChangeTitleByUser(req.session.user.uid, req.body.name);
-    res.redirect("/");
-  }
-});
-
-router.post("/delete/:noteId", async (req, res) => {
-  if (!req.session.loggedIn) {
-    res.redirect("/login");
-  } else {
-    req.params.noteId = parseInt(req.params.noteId);
-    let note = new Note({ nid: req.params.noteId });
-    await note.DeleteByUser(req.session.user.uid);
-    res.redirect("/");
-  }
-}); */
 
 module.exports = router;

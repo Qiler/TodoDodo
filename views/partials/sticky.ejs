@@ -10,8 +10,8 @@
           </div>
           <div class="sticky-list">
             <% note.tasks?.forEach(task => { %>
-              <div class="task">
-                <form class="task-form" action="/task/edit/<%= task.tid %>" data-tid="<%= task.tid %>" autocomplete="off" method="POST">
+              <div class="task" id="task-<%= task.tid %>" data-tid="<%= task.tid %>">
+                <form class="task-form" action="/task/edit/<%= task.tid %>" autocomplete="off" method="POST">
                   <input class="task-checkbox" type="checkbox" name="checked" id="task-checkbox<%= task.tid %>" <% if( task.checked ) { %> checked <% } %>/>
                   <label class="task-checkbox-label" for="task-checkbox<%= task.tid %>">□</label>
                   <input class="task-description-hidden" name="description" type="hidden" value="<%= task.description %>">
@@ -21,7 +21,7 @@
                   <div class="task-description-padding"></div>
                 </form>
                 <button class="task-menu-button"><i class="mdi mdi-cog"></i></button>
-                <div class="task-menu-content">
+<!--                 <div class="task-menu-content">
                   <form action="/task/delete/<%= task.tid %>" method="POST">
                     <button class="sticky-menu-content-delete-button" type="submit">Delete task</button>
                   </form>
@@ -29,7 +29,7 @@
                   <form action="/task/setdue/<%= task.tid %> ">
                     <input class="flatpickr flatpickr-input active" type="text" placeholder="Select Date.." data-id="datetime" readonly="readonly">
                   </form>
-                </div>
+                </div> -->
               </div>
             <% }) %>
           </div>
@@ -42,35 +42,6 @@
             <div class="sticky-menu-button-bars"></div>
             <div class="sticky-menu-button-bars"></div>
             <div class="sticky-menu-button-bars"></div>
-          </div>
-          <div class="sticky-menu-content hidden">
-            <form class="sticky-menu-content-delete-form" action="/note/delete/<%= note.nid %>" method="POST">
-              <button class="sticky-menu-content-delete-button" type="submit">Delete note</button>
-            </form>
-            <span class="bold">Owner: </span><%= note.owner %><br/>
-            <span class="bold">Creation date: </span><script>document.write( new Date("<%= note.creationDate.toISOString() %>").toLocaleString() )</script><br/>
-            <form class="color-form" action="/note/editcolor/<%= note.nid %>" method="POST">
-              <span class="bold">Color: </span>
-              <input name="color" class="color-form-input" type="hidden"/>
-              <button class="sticky-color-button" value="<%= note.color %>" data-jscolor="{ value:'<%= note.color %>' }"></button>
-            </form>
-            <div class="share-with">
-              <span class="bold">Shared note with:</span>
-              <form class="share-with-form" action="/note/share/<%= note.nid %>" method="POST">
-                <button type="submit"><i class="mdi mdi-plus"></i></button>
-                <input name="user" type="text">
-              </form>
-            </div>
-            <% note.users?.forEach(user => { %>
-            <div class="shared-with">
-              <div class="shared-with-avatar"></div>
-              <form action="/note/removeaccess/<%= note.nid %>" method="POST">
-                <input type="hidden" name="userid" value="<%= user.uid %>">
-                <button class="shared-with-button" type="submit"><i class="mdi mdi-close"></i></button>
-              </form>
-              <span class="shared-with-username"><%= user.username %></span>
-            </div>
-            <% }) %>
           </div>
         </div>
       </div>
