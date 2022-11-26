@@ -3,6 +3,9 @@ const router = express.Router();
 const User = require("../models/User");
 const NoteDTO = require("../models/NoteDto");
 const TaskDTO = require("../models/TaskDto");
+const UserDTO = require("../models/UserDTO");
+const fs = require("fs");
+const defaultAvatar = fs.readFileSync("./public/images/default-avatar.png", "base64");
 
 router.get("/", (req, res) => {
   res.send("API");
@@ -77,6 +80,45 @@ router.post("/updatetaskdue/:taskId", async (req, res) => {
     let task = new TaskDTO();
     await task.GetByID(req.params.taskId);
     await task.UpdateDueDateByUser(user.uid,new Date(req.body.dueDate));
+  }
+});
+
+router.get("/getuser/:userId", async (req, res) => {
+  if (!req.session.loggedIn) {
+    res.json({});
+  } else {
+    //let user = new User(req.session.user);
+    req.params.userId = parseInt(req.params.userId);
+    let requestedUser = new UserDTO();
+    await requestedUser.FindByID(req.params.userId);
+    res.json(requestedUser);
+  }
+});
+
+router.get("/getavatar", async (req, res) => {
+  let user = new User(req.session.user);
+  var avatar = Buffer.from(user?.avatar ? user.avatar : defaultAvatar, 'base64');
+  res.writeHead(200, {
+    'Content-Type': 'image/png',
+    'Content-Length': avatar.length
+  });
+  res.end(avatar);
+});
+
+router.get("/getavatar/:userId", async (req, res) => {
+  req.params.userId = parseInt(req.params.userId);
+  let user = new UserDTO();
+  await user.FindByID(req.params.userId);
+  if (!user.uid){
+    res.sendStatus(404);
+  } else {
+    var avatar = Buffer.from(user?.avatar ? user.avatar : defaultAvatar, 'base64');
+
+    res.writeHead(200, {
+      'Content-Type': 'image/png',
+      'Content-Length': avatar.length
+    });
+    res.end(avatar);
   }
 });
 

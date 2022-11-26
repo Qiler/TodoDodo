@@ -68,10 +68,14 @@ router.post("/share/:noteId", async (req, res) => {
   } else {
     let user = new UserDTO({});
     await user.FindByName(req.body.user);
-    req.params.noteId = parseInt(req.params.noteId);
-    let note = new Note({ nid: req.params.noteId });
-    await note.ShareWith(req.session.user.uid, user.uid);
-    res.redirect("/");
+    if (!user.uid){
+      res.sendStatus(400);
+    } else {
+      req.params.noteId = parseInt(req.params.noteId);
+      let note = new Note({ nid: req.params.noteId });
+      await note.ShareWith(req.session.user.uid, user.uid);
+      res.json({user});
+    }
   }
 });
 

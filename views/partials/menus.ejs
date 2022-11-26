@@ -1,3 +1,27 @@
+<div class="user-menu unactive">
+  <div class="user-menu-username"><%= user.username %></div>
+  <div class="user-menu-contents">
+    <form class="user-menu-avatar" action="/user/change-avatar" method="POST">
+      <button type="reset" id="avatar-upload-reset"><i class="mdi mdi-close"></i></button>
+      <label for="avatar-upload" id="avatar-upload-label"></label>
+      <button type="submit" id="avatar-upload-submit"><i class="mdi mdi-upload"></i></button>
+      <input type="file" name="avatar" id="avatar-upload" accept="image/png, image/jpeg">
+    </form>
+    <div class="user-menu-change-credentials">
+      <form class="user-menu-change-email" action="/user/change-email" method="POST">
+        <label for="change-email">Change email:</label></br>
+        <input autocomplete="off" type="email" name="email-change" id="change-email">
+        <button type="submit"><i class="mdi mdi-arrow-right-thick"></i></button>
+      </form>
+      <form class="user-menu-change-password" action="/user/change-password" method="POST">
+        <label for="change-password">Change password:</label></br>
+        <input autocomplete="off" type="password" name="password-change" id="change-password">
+        <button type="submit"><i class="mdi mdi-arrow-right-thick"></i></button>
+      </form>
+    </div>
+  </div>
+  <a class="user-menu-logout-button" href="/logout">Logout</a>
+</div>
 <div class="sticky-menu-content hidden">
   <form class="sticky-menu-content-delete-form" action="/note/delete/" method="POST">
     <button class="sticky-menu-content-delete-button" type="submit">Delete note</button>
@@ -24,8 +48,6 @@
     <button class="task-menu-content-delete-button" type="submit">Delete task</button>
   </form>
   <div class="task-menu-content-users"></div>
-  <span class="bold">Task due date: </span><span class="task-menu-due-date"></span>
-  <form class="task-menu-content-duedate-form" action="/" method="POST">
-    <input class="flatpickr flatpickr-input active" type="text" placeholder="Select Date.." data-id="datetime" readonly="readonly">
-  </form>
+  <span class="bold">Task due date: </span><span class="task-menu-due-date"></span></br>
+  <button class="remove-due-date" type="submit"><i class="mdi mdi-close"></i></button></button><input class="flatpickr flatpickr-input active" type="text" placeholder="Select Date.." data-id="datetime" readonly="readonly">
 </div>

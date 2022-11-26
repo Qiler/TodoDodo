@@ -14,7 +14,7 @@ router.get("/", async (req, res) => {
       await notes[i].Init();
       await notes[i].GetTasks();
     }
-    res.render("index", { notes: notes, notesCount: Object.keys(notes).length });
+    res.render("index", { notes: notes, notesCount: Object.keys(notes).length, user: user });
   }
 });
 

@@ -16,19 +16,17 @@
   <body>
     <header>
       <div class="nav">
-        <!--         <button class="menu-button">
-          <div class="menu-button-dash"></div>
-          <div class="menu-button-dash"></div>
-          <div class="menu-button-dash"></div>
-        </button> -->
-        <img src="/images/TODODODO.svg" alt="TODODODO" class="logo" />
-        <img src="/images/TODODODO Text.svg" alt="TodoDodo..." class="logo-text" />
+        <div class="nav-logos">
+          <img src="/images/TODODODO.svg" alt="TODODODO" class="logo" />
+          <img src="/images/TODODODO Text.svg" alt="TodoDodo..." class="logo-text" />
+        </div>
         <form action="/note/create" method="post" class="nav-add-form">
           <button class="nav-add-button">
             <div class="nav-add-dash"></div>
             <div class="nav-add-dash nav-add-dash-second"></div>
           </button>
         </form>
+        <div class="nav-user-menu"><img src="/api/getavatar" alt=""></div>
       </div>
     </header>
     <%- body %>

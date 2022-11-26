@@ -1,13 +1,13 @@
 /* Handwritten */
-@import url("https://fonts.cdnfonts.com/css/zai-bazgroly");
+/* @import url("https://fonts.cdnfonts.com/css/zai-bazgroly");
 @import url("https://fonts.cdnfonts.com/css/fauves-book");
-@import url("https://fonts.cdnfonts.com/css/le-sofia");
+@import url("https://fonts.cdnfonts.com/css/le-sofia"); */
 @import url("https://fonts.cdnfonts.com/css/travel-october");
 /* Cursives */
-@import url("https://fonts.cdnfonts.com/css/mixscribble");
+/* @import url("https://fonts.cdnfonts.com/css/mixscribble");
 @import url("https://fonts.cdnfonts.com/css/amigho");
 @import url("https://fonts.cdnfonts.com/css/autumn-monoline");
-@import url("https://fonts.cdnfonts.com/css/lazy-writer");
+@import url("https://fonts.cdnfonts.com/css/lazy-writer"); */
 
 :root {
   --sticky1: #ff7eb9;
@@ -54,38 +54,26 @@ body {
   background-color: rgba(255, 255, 255, 0.774);
   border-bottom: 1px solid var(--black);
   box-shadow: 0.4rem 0.4rem 1rem rgba(0, 0, 0, 0.4);
-  justify-content: flex-start;
+  justify-content: center;
 }
 
-/* .menu-button {
-  min-width: 3rem;
-  padding: 0;
-  margin: 0;
-  background-color: transparent;
-  border: none;
-  cursor: pointer;
-  display: block;
+.nav-logos {
+  height: 100%;
+  min-width: fit-content;
+  display: flex;
+  margin-right: auto;
 }
-
-.menu-button:hover .menu-button-dash {
-  background-color: rgb(61, 61, 61);
-}
-
-.menu-button-dash {
-  background-color: var(--black);
-  width: calc(100% - 0.8rem);
-  height: calc((100% / 3) - (0.1rem * 6));
-  margin: 0.4em 0.4rem;
-  border-radius: 1rem;
-} */
 
 .logo {
-  margin: 0.2rem;
-  display: block;
+  height: 100%;
+  padding: 0.2rem;
+  box-sizing: border-box;
 }
 
 .logo-text {
-  padding: 0.2rem 0;
+  height: 100%;
+  padding: 0.2rem;
+  box-sizing: border-box;
 }
 
 @media screen and (max-width: 600px) {
@@ -99,9 +87,6 @@ body {
   padding: 0;
   margin: 0;
   display: block;
-  margin-right: 0.2rem;
-  position: relative;
-  margin-left: auto;
 }
 
 .nav-add-button {
@@ -110,6 +95,7 @@ body {
   cursor: pointer;
   width: 100%;
   height: 100%;
+  position: relative;
 }
 
 .nav-add-dash {
@@ -129,6 +115,199 @@ body {
 
 .nav-add-button:hover .nav-add-dash {
   background-color: rgb(61, 61, 61);
+}
+
+.nav-user-menu {
+  height: 100%;
+  aspect-ratio: 1;
+  border: solid black 1px;
+  border-bottom: none;
+  box-sizing: border-box;
+  margin-left: auto;
+  background-color: var(--green);
+  cursor: pointer;
+}
+
+.nav-user-menu:hover {
+  filter: brightness(1.2);
+}
+
+.nav-user-menu img{
+  height: 100%;
+  width: 100%;
+}
+
+.user-menu {
+  position: absolute;
+  background: rgba(255, 255, 255, 1);
+  border: solid black 1px;
+  /* border-radius: 0.5rem; */
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  z-index: 1100;
+  white-space: nowrap;
+  break-inside: avoid;
+  overflow: hidden;
+  top: 3rem;
+  right: 0;
+  max-height: 20.5rem;
+  transition: max-height 0.3s, border-width 0.3s;
+  transition-timing-function: ease-in-out;
+  box-sizing: content-box;
+}
+
+.user-menu.unactive{
+  max-height: 0;
+  border-width: 0;
+}
+
+.user-menu-username {
+  min-height: 3rem;
+  background-color: var(--green);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-bottom: solid black 1px;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  font-size: 1.5rem;
+  font-weight: bold;
+  overflow: hidden;
+  user-select: none;
+}
+
+
+
+/* .filepond {
+  max-height: 5rem;
+  max-width: 5rem;
+  margin: auto;
+}
+
+.filepond:hover {
+  filter: brightness(1.2);
+}
+
+.filepond--panel-root {
+  background-image: url("/api/getavatar");
+  background-size: cover;
+  border-radius: 0 !important;
+  border: solid black 1px;
+}
+
+.filepond--credits {
+  display: none;
+}
+
+.filepond--list {
+  width: 100%;
+  height: 100%;
+  top: 0 !important;
+  left: 0 !important;
+  position: absolute !important;
+}
+ */
+.user-menu-contents {
+  padding: 1rem;
+  min-width: 15rem;
+  min-height: 12.092rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.user-menu-avatar {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.user-menu-avatar button {
+  width: 1.5rem;
+  height: 1.5rem;
+  background-color: var(--red);
+  border: solid black 1px;
+  cursor: pointer;
+  display: none;
+}
+
+.user-menu-avatar button:hover {
+  filter: brightness(1.2);
+}
+
+.user-menu-avatar button:nth-child(3) {
+  background-color: var(--green);
+}
+
+#avatar-upload {
+  display: none;
+}
+
+#avatar-upload-label {
+  height: 5rem;
+  width: 5rem;
+  background-image: url("/api/getavatar");
+  background-size: cover;
+  background-position: center;
+  border: solid black 1px;
+  cursor: pointer;
+}
+
+.user-menu-avatar label:hover {
+  filter: brightness(1.2);
+}
+
+.user-menu-change-credentials {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.user-menu-change-credentials form {
+  margin-bottom: 0.5rem;
+}
+
+.user-menu-change-credentials form button{
+  border: solid black 1px;
+  height: 1.4rem;
+  width: 1.4rem;
+  background-color: var(--green);
+  cursor: pointer;
+}
+
+.user-menu-change-credentials form button:hover {
+  background-color: var(--lightgreen);
+}
+
+.user-menu-change-credentials form input{
+  border: solid black 1px;
+  height: 1.4rem;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.user-menu-change-credentials form span{
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.user-menu-logout-button {
+  min-height: 3rem;
+  background-color: var(--red);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-top: solid black 1px;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: black;
+  text-decoration: none;
+  bottom: 0;
+}
+
+.user-menu-logout-button:hover {
+  background-color: var(--lightred);
 }
 
 main {
@@ -155,20 +334,20 @@ main {
   border: solid var(--black) 1px;
 
   position: absolute;
-  top: 50%;
-  left: 50%;
+  top: 50vh;
+  left: 50vw;
   animation: slide-down 0.5s;
-  translate: -50% -50%;
+  transform: translate(-50%, -50%);
 }
 
 @keyframes slide-down {
   0% {
     opacity: 0%;
-    translate: -50% -70%;
+    transform: translate(-50%, -70%);
   }
   100% {
     opacity: 100%;
-    translate: -50% -50%;
+    transform: translate(-50%, -50%);
   }
 }
 
@@ -226,29 +405,6 @@ main {
   transform: scale(95%);
 }
 
-/* .menu-slide {
-  position: fixed;
-  height: 100%;
-  width: 1rem;
-  top: 3rem;
-  background-color: rgba(0, 0, 0, 0.829);
-  z-index: 1;
-}
-
-.menu-slide {
-  position: fixed;
-  height: 100%;
-  width: 0rem;
-  top: 3rem;
-  background-color: rgba(0, 0, 0, 0.829);
-  z-index: 1;
-  transition: width 0.2sec;
-}
-
-.menu-slide-open {
-  width: 20rem;
-} */
-
 /*  Sticky Notes */
 .container {
   margin: 3rem;
@@ -264,16 +420,7 @@ main {
   overflow: visible;
 }
 
-/* @media screen and (max-width: 600px) {
-  .container {
-    margin: 1rem;
-  }
-} */
-
 .sticky {
-  /*   background-color: var(--sticky5); */
-  /* box-shadow: 0.1rem 0.1rem 1rem rgba(0, 0, 0, 0.4); */
-  /* background-image: url(/public/template/images/sticky.svg); */
   position: relative;
   max-width: 30rem;
   min-height: 8rem;
@@ -328,7 +475,7 @@ main {
 
 .sticky-container {
   background-color: var(--sticky4);
-  /* -webkit-mask-image: url("/images/sticky-mask.svg"); */
+  -webkit-mask-image: url("/images/sticky-mask.svg");
   mask-image: url("/images/sticky-mask.svg");
   mask-size: 100% 100%;
 }
@@ -342,6 +489,7 @@ main {
   background-size: 100% 100%;
   filter: drop-shadow(0.5rem 0.5rem 0.2rem rgba(0, 0, 0, 0.4));
   z-index: -1;
+  outline: 10px solid transparent;
 }
 
 .sticky-title {
@@ -483,6 +631,14 @@ main {
 
 .shared-with form button:hover {
   background-color: var(--lightred);
+}
+
+.shared-with-avatar {
+  height: 1.5rem;
+  width: 1.5rem;
+  border: solid black 1px;
+  margin-right: 0.2rem;
+  box-sizing: border-box;
 }
 
 .shared-with-username {
@@ -630,7 +786,9 @@ main {
   opacity: 0;
 }
 
-.task:hover > .task-menu-button {
+.task:hover > .task-menu-button,
+.task:focus > .task-menu-button,
+.task:focus-within > .task-menu-button {
   opacity: 1;
 }
 
@@ -653,6 +811,22 @@ main {
   white-space: nowrap;
   break-inside: avoid;
   overflow: hidden;
+}
+
+.remove-due-date {
+  background-color: var(--red);
+  border: none;
+  margin: 0;
+  padding: 0;
+  height: 1.5rem;
+  width: 1.5rem;
+  border: solid black 1px;
+  margin-right: 0.2rem;
+  cursor: pointer;
+}
+
+.remove-due-date:hover {
+  background-color: var(--lightred);
 }
 
 .sticky-add {

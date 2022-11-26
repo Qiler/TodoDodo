@@ -5,6 +5,39 @@ function ranomSeeded(seed) {
   return seed;
 }
 
+function submitForm(evt){
+  evt.preventDefault();
+  const form = $(evt.delegateTarget);
+  const url = form.attr("action");
+  $.ajax({
+    type: "POST",
+    url: url,
+    data: form.serialize()
+  });
+}
+
+function appendUser(user){
+  const nid = $(".sticky-menu-content").attr("data-nid");
+  const menu = $(".sticky-menu-content");
+  const menuList = menu.find(".shared-with").first();
+  const newUsermenuEntry = menuList.append(`
+  <div class="shared-with-container">
+    <form action="/note/removeaccess/${nid}" method="POST">
+      <input type="hidden" name="userid" value="${user.uid}">
+      <button class="shared-with-button" type="submit"><i class="mdi mdi-close"></i></button>
+    </form>
+    <img class="shared-with-avatar" src="/api/getavatar/${user.uid}"></img>
+    <span class="shared-with-username">${user.username}</span>
+  </div>
+  `);
+  newUsermenuEntry.find("form").first().submit(function(evt){
+    submitForm(evt);
+    setTimeout(() => {
+      $(this).closest(".shared-with-container").remove();
+    }, 100);
+  });
+}
+
 $(".sticky").each(function () {
   const sticky = $(this);
   /*     for (var i = sticky.attr("id").length - 1; i >= 0; i--) {
@@ -12,7 +45,7 @@ $(".sticky").each(function () {
     } */
   const number = ranomSeeded(parseInt(sticky.data("nid")) * 1000000);
   const rotation = (number - 0.5) * 10;
-  sticky.css("transform", `rotate( ${rotation}deg )`);
+  sticky.css("transform", `rotateZ( ${rotation}deg ) translateZ(1px)`);
   sticky.find(".task-checkbox").bind("click", function (evt) {
     const nowDate = new Date();
     const taskForm = $(this).parent();
@@ -46,19 +79,9 @@ $(".sticky").each(function () {
   });
 });
 
-function submitForm(evt){
-  evt.preventDefault();
-  const form = $(this);
-  const url = form.attr("action");
-  $.ajax({
-    type: "POST",
-    url: url,
-    data: form.serialize(),
-  });
-}
-
 $(".sticky form").submit(submitForm);
-$(".sticky-menu-content form").submit(submitForm);
+$(".sticky-menu-content-delete-form").submit(submitForm);
+$(".color-form").submit(submitForm);
 $(".task-menu-content form").submit(submitForm);
 
 $(".sticky-add-form").submit(function (evt) {
@@ -68,9 +91,29 @@ $(".sticky-add-form").submit(function (evt) {
 });
 
 $(".share-with-form").submit(function (evt) {
-  setTimeout(() => {
+  evt.preventDefault();
+  const nid = $(".sticky-menu-content").attr("data-nid");
+  const form = $(this);
+  const url = `/note/share/${nid}`;
+  $.ajax({
+    type: "POST",
+    url: url,
+    data: form.serialize(),
+    success: function (data) {
+      //console.log(data);
+    },
+    statusCode: {
+      400: function(data) {
+        //TODO: error message.
+      },
+      200: function(data) {
+        appendUser(data.user)
+      }
+    }
+  });
+/*   setTimeout(() => {
     document.location.reload();
-  }, 100);
+  }, 100); */
 });
 
 $(".sticky-menu-button").bind("click", async function (evt) {
@@ -78,6 +121,7 @@ $(".sticky-menu-button").bind("click", async function (evt) {
   const target = $(evt.delegateTarget);
   const sticky = target.closest(".sticky");
   const nid = sticky.attr("data-nid");
+  menu.attr("data-nid",nid);
   const buttonPosition = target.offset();
   const menuList = menu.find(".shared-with").first();
   menu.find(".shared-with").children().remove();
@@ -91,19 +135,10 @@ $(".sticky-menu-button").bind("click", async function (evt) {
       menu.find(".note-owner").first().text(data.owner);
       menu.find(".note-creation-date").first().text(date);
       menu.find(".color-form").first().attr("action", `/note/editcolor/${data.nid}`);
-      menu.find(".sticky-color-button").attr("data-nid",data.nid)
+      menu.find(".sticky-color-button").attr("data-nid",data.nid);
       menu.find(".sticky-color-button").first()[0].jscolor.fromString(data.color);
       for (let user of data.users) {
-        menuList.append(`
-        <div class="shared-with-container">
-          <form action="/note/removeaccess/${nid}" method="POST">
-            <input type="hidden" name="userid" value="${user.uid}">
-            <button class="shared-with-button" type="submit"><i class="mdi mdi-close"></i></button>
-          </form>
-          <div class="shared-with-avatar"></div>
-          <span class="shared-with-username">${user.username}</span>
-        </div>
-        `);
+        appendUser(user);
       }
     },
   });
@@ -120,17 +155,19 @@ $(".task-menu-button").bind("click", async function (evt) {
   const tid = task.attr("data-tid");
   menu.attr("data-tid",tid)
   const buttonPosition = target.offset();
-  menu.attr("data-tid",tid)
   const taskDueDateElement = task.find(".task-form").first().find(".task-due-date");
   menuUsers.children().remove();
   menu.find(".task-menu-content-delete-form").first().attr("action", `/task/delete/${tid}`);
-  menu.find(".task-menu-content-duedate-form").first().attr("action", `/task/setdue/${tid}`);
   await $.ajax({
     url: `/api/gettask/${tid}`,
     type: "GET",
     dataType: "json",
     success: function (data) {
-      flatPickrInstance.setDate(new Date(data.dueDate),false);
+      let dueDate = null;
+      if (data.dueDate){
+        dueDate = new Date(data.dueDate);
+      }
+      flatPickrInstance.setDate(dueDate,false);
       menuUsers.append(`
       <span class="bold">Added by: </span>
       <span>${data.addedBy}</span>
@@ -145,6 +182,26 @@ $(".task-menu-button").bind("click", async function (evt) {
   menu.css("top", buttonPosition.top + 5);
   menu.css("left", buttonPosition.left - menu.width());
   menu.removeClass("hidden");
+});
+
+$(".remove-due-date").bind("click", async function (evt) {
+  const menu = $(".task-menu-content");
+  const tid = menu.attr("data-tid");
+  const task = $(`#task-${tid}`);
+  const dueDate = task.find(".timeago.task-due-date");
+  flatPickrInstance.setDate(null,false);
+  dueDate.attr("datetime",null);
+  dueDate.timeago("update",null);
+  dueDate.text("");
+  dueDate.attr("datetime","");
+  $.ajax({
+    url: `/api/updatetaskdue/${tid}`,
+    type: "POST",
+    data: {
+      tid: tid,
+      dueDate: null
+    }
+  });
 });
 
 $(document).bind("click", function (evt) {
@@ -186,8 +243,6 @@ jscolor.presets.default = {
   onChange: changeColor,
 };
 
-//jscolor.install();
-
 function changeColor() {
   const thisElement = $(this.previewElement);
   thisElement.siblings(".color-form-input").val(this.toHEXString());
@@ -219,3 +274,45 @@ const flatPickrInstance = $(".flatpickr").flatpickr({
     });
   }
 });
+
+$(".nav-user-menu").bind("click", function (evt) {
+  $(".user-menu").toggleClass("unactive");
+});
+
+$("#avatar-upload").change(function(evt){
+  let fileUrl = URL.createObjectURL(this.files[0]);
+  $("#avatar-upload-label").css("background-image",`url(${fileUrl})`);
+  $(".user-menu-avatar").find("button").css("display","block");
+});
+
+$("#avatar-upload-reset").bind("click", function (evt) {
+  $("#avatar-upload-label").css("background-image",`url("/api/getavatar")`);
+  $(".user-menu-avatar").find("button").css("display","none");
+});
+
+function submitAvatarForm(evt){
+  evt.preventDefault();
+  const form = $(this);
+  const formInput = form.find("#avatar-upload").first()[0];
+  const file = formInput.files[0]
+  const reader = new FileReader();
+  reader.onloadend = () => {
+    const url = form.attr("action");
+    $.ajax({
+      type: "POST",
+      url: url,
+      data: {avatar: reader.result},
+      success: function (data) {
+        const refreshCache = Math.floor(Math.random() * 1000000);
+        $("#avatar-upload-label").css("background-image",`url("/api/getavatar?refresh=${refreshCache}")`);
+        $(".nav-user-menu img").attr("src",`/api/getavatar?refresh=${refreshCache}`);
+        $(".user-menu-avatar").find("button").css("display","none");
+      }
+    });
+    };
+  reader.readAsDataURL(file);
+}
+
+$(".user-menu-avatar").submit(submitAvatarForm);
+$(".user-menu-change-email").submit(submitForm);
+$(".user-menu-change-password").submit(submitForm);
