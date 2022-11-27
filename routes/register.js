@@ -12,7 +12,7 @@ router.get("/", async (req, res) => {
 
 router.post("/submit", async (req, res) => {
   try {
-    if (req.body.username === "" || req.body.username === undefined || req.body.username === null) {
+    if (!req.body.username) {
       throw "Invalid Username.";
     }
 
@@ -21,7 +21,7 @@ router.post("/submit", async (req, res) => {
     }
 
     let dbUser = await users.GetByUsername(req.body.username);
-    if (dbUser?.username != undefined) {
+    if (dbUser?.username) {
       throw "Username already in use.";
     }
 
@@ -43,23 +43,19 @@ router.post("/submit", async (req, res) => {
     await users.AddUser(req.body.username, req.body.email, password);
     dbUser = await users.GetByUsername(req.body.username);
     if (dbUser?.username == undefined) {
-      throw "Failed crating user.";
+      throw "Failed creating user.";
     }
 
     let user = new User(dbUser);
-    if (user != undefined) {
-      req.session.regenerate(function (err) {
-        if (err) next(err);
-        req.session.loggedIn = true;
-        req.session.user = user;
-        req.session.save(function (err) {
-          if (err) return next(err);
-          res.redirect("/");
-        });
+    req.session.regenerate(function (err) {
+      if (err) next(err);
+      req.session.loggedIn = true;
+      req.session.user = user;
+      req.session.save(function (err) {
+        if (err) return next(err);
+        res.redirect("/");
       });
-    } else {
-      throw "Automatic login failed.";
-    }
+    });
   } catch (err) {
     console.error(err);
     res.render("register", { errorMessage: err, formInput: { username: req.body.username, email: req.body.email } });

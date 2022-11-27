@@ -22,11 +22,11 @@ function appendUser(user) {
   const menuList = menu.find(".shared-with").first();
   const newUsermenuEntry = menuList.append(`
   <div class="shared-with-container">
-    <form action="/note/removeaccess/${nid}" method="POST">
+    <form action="note/removeaccess/${nid}" method="POST">
       <input type="hidden" name="userid" value="${user.uid}">
       <button class="shared-with-button" type="submit"><i class="mdi mdi-close"></i></button>
     </form>
-    <img class="shared-with-avatar" src="/api/getavatar/${user.uid}"></img>
+    <img class="shared-with-avatar" src="api/getavatar/${user.uid}"></img>
     <span class="shared-with-username">${user.username}</span>
   </div>
   `);
@@ -286,7 +286,7 @@ $("#avatar-upload").change(function (evt) {
 });
 
 $("#avatar-upload-reset").bind("click", function (evt) {
-  $("#avatar-upload-label").css("background-image", `url("/api/getavatar")`);
+  $("#avatar-upload-label").css("background-image", `url("api/getavatar")`);
   $(".user-menu-avatar").find("button").css("display", "none");
 });
 
@@ -304,7 +304,7 @@ function submitAvatarForm(evt) {
       data: { avatar: reader.result },
       success: function (data) {
         const refreshCache = Math.floor(Math.random() * 1000000);
-        $("#avatar-upload-label").css("background-image", `url("/api/getavatar?refresh=${refreshCache}")`);
+        $("#avatar-upload-label").css("background-image", `url("api/getavatar?refresh=${refreshCache}")`);
         $(".nav-user-menu img").attr("src", `/api/getavatar?refresh=${refreshCache}`);
         $(".user-menu-avatar").find("button").css("display", "none");
       },

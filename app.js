@@ -38,16 +38,6 @@ app.use("/user", require("./routes/user"));
 app.use("/register", require("./routes/register"));
 app.use("/note", require("./routes/note"));
 app.use("/task", require("./routes/task"));
-app.use((req,res,next) => {
-  if (req.path.startsWith("/api/getavatar")){
-    return next();
-  }
-  if (!req.session.loggedIn) {
-    res.json({});
-  } else {
-    next();
-  }
-})
 app.use("/api", require("./routes/api"));
 
 app.listen(process.env.PORT || 3000);

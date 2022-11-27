@@ -1,6 +1,6 @@
 <div class="login-div">
   <div class="login-box">
-    <form action="/login/auth" method="POST">
+    <form action="login/auth" method="POST">
       <h2>Login</h2>
       <h4><%=locals?.errorMessage%></h4>
       <label for="input-username">Username</label>
@@ -9,7 +9,7 @@
       <input type="password" class="login-input" name="password" id="input-password" placeholder="🔒 Type in your password" />
       <div class="login-submit">
         <button type="submit">Log in</button>
-        <a href="/register"><button type="button">Register</button></a>
+        <a href="register"><button type="button">Register</button></a>
       </div>
     </form>
   </div>

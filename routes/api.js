@@ -12,9 +12,8 @@ router.get("/", (req, res) => {
   res.send("API");
 });
 
-router.use((req,res,next) => {
-  console.log(req.res);
-  if (req.path.startsWith("/getavatar")){
+router.use((req, res, next) => {
+  if (req.path.startsWith("/getavatar")) {
     return next();
   }
   if (!req.session.loggedIn) {
@@ -22,11 +21,14 @@ router.use((req,res,next) => {
   } else {
     next();
   }
-})
+});
 
 router.get("/getnote/:noteId", async (req, res) => {
   let user = new User(req.session.user);
   req.params.noteId = parseInt(req.params.noteId);
+  if (!req.params.noteId) {
+    return res.json({});
+  }
 
   let note = new NoteDto({
     nid: req.params.noteId,
@@ -38,6 +40,7 @@ router.get("/getnote/:noteId", async (req, res) => {
   await note.GetTasks();
   const permissions = await note.CheckPermissions(user.uid);
   const users = [];
+
   if (permissions) {
     for (let user of note.users) {
       user = {
@@ -65,10 +68,15 @@ router.get("/getnote/:noteId", async (req, res) => {
 router.get("/gettask/:taskId", async (req, res) => {
   let user = new User(req.session.user);
   req.params.taskId = parseInt(req.params.taskId);
+  if (!req.params.taskId) {
+    return res.json({});
+  }
+
   let task = new TaskDto();
   await task.GetByID(req.params.taskId);
   await task.Init();
   const permissions = await task.CheckPermissions(user.uid);
+
   if (permissions) {
     res.json(task);
   } else {
@@ -79,6 +87,10 @@ router.get("/gettask/:taskId", async (req, res) => {
 router.post("/updatetaskdue/:taskId", async (req, res) => {
   let user = new User(req.session.user);
   req.params.taskId = parseInt(req.params.taskId);
+  if (!req.params.taskId) {
+    return res.json({});
+  }
+
   let task = new TaskDto();
   await task.GetByID(req.params.taskId);
   await task.UpdateDueDateByUser(user.uid, new Date(req.body.dueDate));
@@ -86,6 +98,10 @@ router.post("/updatetaskdue/:taskId", async (req, res) => {
 
 router.get("/getuser/:userId", async (req, res) => {
   req.params.userId = parseInt(req.params.userId);
+  if (!req.params.userId) {
+    return res.json({});
+  }
+
   let requestedUser = new UserDto();
   await requestedUser.FindByID(req.params.userId);
   res.json(requestedUser);
@@ -103,6 +119,10 @@ router.get("/getavatar", async (req, res) => {
 
 router.get("/getavatar/:userId", async (req, res) => {
   req.params.userId = parseInt(req.params.userId);
+  if (!req.params.userId) {
+    return res.sendStatus(400);
+  }
+
   let user = new UserDto();
   await user.FindByID(req.params.userId);
   if (!user.uid) {
