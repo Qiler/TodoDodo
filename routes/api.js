@@ -12,6 +12,18 @@ router.get("/", (req, res) => {
   res.send("API");
 });
 
+router.use((req,res,next) => {
+  console.log(req.res);
+  if (req.path.startsWith("/getavatar")){
+    return next();
+  }
+  if (!req.session.loggedIn) {
+    res.json({});
+  } else {
+    next();
+  }
+})
+
 router.get("/getnote/:noteId", async (req, res) => {
   let user = new User(req.session.user);
   req.params.noteId = parseInt(req.params.noteId);
