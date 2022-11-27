@@ -1,8 +1,6 @@
 const db = require("../modules/db");
 const UserRepo = require("../repos/UserRepository");
 const users = new UserRepo(db);
-const NoteRepo = require("../repos/NoteRepository");
-const notes = new NoteRepo(db);
 const TaskRepo = require("../repos/TaskRepository");
 const tasks = new TaskRepo(db);
 const Task = require("./Task");

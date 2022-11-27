@@ -1,7 +1,6 @@
 const express = require("express");
 const router = express.Router();
 const db = require("../modules/db");
-const User = require("../models/User");
 const Note = require("../models/Note");
 const Task = require("../models/Task");
 const TaskRepo = require("../repos/TaskRepository");

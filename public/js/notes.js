@@ -40,9 +40,6 @@ function appendUser(user){
 
 $(".sticky").each(function () {
   const sticky = $(this);
-  /*     for (var i = sticky.attr("id").length - 1; i >= 0; i--) {
-      number = number + sticky.attr("id").charCodeAt(i);
-    } */
   const number = ranomSeeded(parseInt(sticky.data("nid")) * 1000000);
   const rotation = (number - 0.5) * 10;
   sticky.css("transform", `rotateZ( ${rotation}deg ) translateZ(1px)`);
@@ -99,21 +96,16 @@ $(".share-with-form").submit(function (evt) {
     type: "POST",
     url: url,
     data: form.serialize(),
-    success: function (data) {
-      //console.log(data);
-    },
     statusCode: {
       400: function(data) {
-        //TODO: error message.
+        $(".sticky-menu-error").text("User does not exits.");
+        $(".sticky-menu-error").removeClass("hidden");
       },
       200: function(data) {
         appendUser(data.user)
       }
     }
   });
-/*   setTimeout(() => {
-    document.location.reload();
-  }, 100); */
 });
 
 $(".sticky-menu-button").bind("click", async function (evt) {
@@ -206,13 +198,15 @@ $(".remove-due-date").bind("click", async function (evt) {
 
 $(document).bind("click", function (evt) {
   const stickyMenu = $(".sticky-menu-content");
-  const taskMenu = $(".task-menu-content")
+  const taskMenu = $(".task-menu-content");
   if (
     !stickyMenu.hasClass("hidden") &&
     !(stickyMenu.is($(evt.target)) || $.contains(stickyMenu[0], evt.target) || (!!$(".jscolor-wrap")[0] && $.contains($(".jscolor-wrap")[0], evt.target))) &&
     !($(evt.target).hasClass("sticky-menu-button") || $(evt.target).hasClass("sticky-menu-button-bars"))
   ) {
     stickyMenu.addClass("hidden");
+    $(".sticky-menu-error").text("");
+    $(".sticky-menu-error").addClass("hidden");
   }
   if (
     !taskMenu.hasClass("hidden") &&
@@ -261,7 +255,7 @@ const flatPickrInstance = $(".flatpickr").flatpickr({
   time_24hr: true,
   onChange: async function(dates){
     const tid = $(".task-menu-content").attr("data-tid");
-    const task = $(`#task-${tid}`)
+    const task = $(`#task-${tid}`);
     task.find(".timeago.task-due-date").attr("datetime",dates[0].toUTCString().toLowerCase());
     task.find(".timeago.task-due-date").timeago("update",dates[0]);
     await $.ajax({
@@ -294,7 +288,7 @@ function submitAvatarForm(evt){
   evt.preventDefault();
   const form = $(this);
   const formInput = form.find("#avatar-upload").first()[0];
-  const file = formInput.files[0]
+  const file = formInput.files[0];
   const reader = new FileReader();
   reader.onloadend = () => {
     const url = form.attr("action");

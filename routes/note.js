@@ -3,7 +3,6 @@ const router = express.Router();
 const User = require("../models/User");
 const UserDTO = require("../models/UserDTO");
 const Note = require("../models/Note");
-const Task = require("../models/Task");
 
 router.post("/create", async (req, res) => {
   if (!req.session.loggedIn) {

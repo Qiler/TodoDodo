@@ -26,15 +26,16 @@
   <form class="sticky-menu-content-delete-form" action="/note/delete/" method="POST">
     <button class="sticky-menu-content-delete-button" type="submit">Delete note</button>
   </form>
-  <span class="bold">Owner: </span><span class="note-owner"></span><br/>
-  <span class="bold">Creation date: </span><span class="note-creation-date"></span><br/>
+  <span class="bold unselectable">Owner: </span><span class="note-owner"></span><br/>
+  <span class="bold unselectable">Creation date: </span><span class="note-creation-date"></span><br/>
   <form class="color-form" action="/" method="POST">
-    <span class="bold">Color: </span>
+    <span class="bold unselectable">Color: </span>
     <input name="color" class="color-form-input" type="hidden"/>
     <button class="sticky-color-button" data-jscolor=""></button>
   </form>
   <div class="share-with">
-    <span class="bold">Shared note with:</span>
+    <span class="bold unselectable">Shared note with:</span>
+    </br><span class="sticky-menu-error hidden"></span>
     <form class="share-with-form" action="/note/share/" method="POST">
       <button type="submit"><i class="mdi mdi-plus"></i></button>
       <input name="user" type="text">

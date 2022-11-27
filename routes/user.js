@@ -1,8 +1,5 @@
 const express = require("express");
 const router = express.Router();
-const db = require("../modules/db");
-const usersRepo = require("../repos/UserRepository");
-const users = new usersRepo(db);
 const bcrypt = require("bcrypt");
 const User = require("../models/User");
 const sharp = require("sharp");
@@ -14,7 +11,6 @@ router.post("/change-avatar", async (req, res) => {
     const user = new User(req.session.user);
     const image = req.body.avatar;
     const parts = image.split(";");
-    const mimeType = parts[0].split(":")[1];
     const imageData = parts[1].split(",")[1];
 
     let avatar = new Buffer.from(imageData,"base64");
