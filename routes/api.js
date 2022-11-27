@@ -28,7 +28,7 @@ router.get("/getnote/:noteId", async (req, res) => {
     await note.GetTasks();
     const permissions = await note.CheckPermissions(user.uid);
     const users = [];
-    if (permissions){
+    if (permissions) {
       for (let user of note.users) {
         user = {
           uid: user.uid,
@@ -37,7 +37,7 @@ router.get("/getnote/:noteId", async (req, res) => {
         };
         users.push(user);
       }
-      res.json({ 
+      res.json({
         nid: note.nid,
         ownerId: note.ownerId,
         owner: note.owner,
@@ -45,7 +45,7 @@ router.get("/getnote/:noteId", async (req, res) => {
         name: note.name,
         color: note.color,
         tasks: note.tasks,
-        users: users
+        users: users,
       });
     } else {
       res.json({});
@@ -63,7 +63,7 @@ router.get("/gettask/:taskId", async (req, res) => {
     await task.GetByID(req.params.taskId);
     await task.Init();
     const permissions = await task.CheckPermissions(user.uid);
-    if (permissions){
+    if (permissions) {
       res.json(task);
     } else {
       res.json({});
@@ -79,7 +79,7 @@ router.post("/updatetaskdue/:taskId", async (req, res) => {
     req.params.taskId = parseInt(req.params.taskId);
     let task = new TaskDto();
     await task.GetByID(req.params.taskId);
-    await task.UpdateDueDateByUser(user.uid,new Date(req.body.dueDate));
+    await task.UpdateDueDateByUser(user.uid, new Date(req.body.dueDate));
   }
 });
 
@@ -96,10 +96,10 @@ router.get("/getuser/:userId", async (req, res) => {
 
 router.get("/getavatar", async (req, res) => {
   let user = new User(req.session.user);
-  var avatar = Buffer.from(user?.avatar ? user.avatar : defaultAvatar, 'base64');
+  var avatar = Buffer.from(user?.avatar ? user.avatar : defaultAvatar, "base64");
   res.writeHead(200, {
-    'Content-Type': 'image/png',
-    'Content-Length': avatar.length
+    "Content-Type": "image/png",
+    "Content-Length": avatar.length,
   });
   res.end(avatar);
 });
@@ -108,14 +108,14 @@ router.get("/getavatar/:userId", async (req, res) => {
   req.params.userId = parseInt(req.params.userId);
   let user = new UserDto();
   await user.FindByID(req.params.userId);
-  if (!user.uid){
+  if (!user.uid) {
     res.sendStatus(404);
   } else {
-    var avatar = Buffer.from(user?.avatar ? user.avatar : defaultAvatar, 'base64');
+    var avatar = Buffer.from(user?.avatar ? user.avatar : defaultAvatar, "base64");
 
     res.writeHead(200, {
-      'Content-Type': 'image/png',
-      'Content-Length': avatar.length
+      "Content-Type": "image/png",
+      "Content-Length": avatar.length,
     });
     res.end(avatar);
   }

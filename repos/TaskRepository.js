@@ -39,15 +39,15 @@ class TaskRepository {
     }
     return await this.db.runAsync("UPDATE tasks SET description = ?, checked = ? WHERE tid = ?", [description, checked, tid]);
   }
-  
+
   async UpdateDueDate(tid, date) {
     return await this.db.runAsync("UPDATE tasks SET dueDate = ? WHERE tid = ?", [date, tid]);
   }
-  
+
   async UpdateFinishedDate(tid, date) {
     return await this.db.runAsync("UPDATE tasks SET finishedDate = ? WHERE tid = ?", [date, tid]);
   }
-  
+
   async UpdateChecked(tid, checked) {
     return await this.db.runAsync("UPDATE tasks SET checked = ? WHERE tid = ?", [checked, tid]);
   }
@@ -59,7 +59,6 @@ class TaskRepository {
   async UpdateDescription(tid, description) {
     return await this.db.runAsync("UPDATE tasks SET description = ? WHERE tid = ?", [description, tid]);
   }
-  
 }
 
 module.exports = TaskRepository;

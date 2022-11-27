@@ -5,18 +5,18 @@ function ranomSeeded(seed) {
   return seed;
 }
 
-function submitForm(evt){
+function submitForm(evt) {
   evt.preventDefault();
   const form = $(evt.delegateTarget);
   const url = form.attr("action");
   $.ajax({
     type: "POST",
     url: url,
-    data: form.serialize()
+    data: form.serialize(),
   });
 }
 
-function appendUser(user){
+function appendUser(user) {
   const nid = $(".sticky-menu-content").attr("data-nid");
   const menu = $(".sticky-menu-content");
   const menuList = menu.find(".shared-with").first();
@@ -30,12 +30,15 @@ function appendUser(user){
     <span class="shared-with-username">${user.username}</span>
   </div>
   `);
-  newUsermenuEntry.find("form").first().submit(function(evt){
-    submitForm(evt);
-    setTimeout(() => {
-      $(this).closest(".shared-with-container").remove();
-    }, 100);
-  });
+  newUsermenuEntry
+    .find("form")
+    .first()
+    .submit(function (evt) {
+      submitForm(evt);
+      setTimeout(() => {
+        $(this).closest(".shared-with-container").remove();
+      }, 100);
+    });
 }
 
 $(".sticky").each(function () {
@@ -47,8 +50,8 @@ $(".sticky").each(function () {
     const nowDate = new Date();
     const taskForm = $(this).parent();
     taskForm.submit();
-    taskForm.find(".timeago.task-finished-date").attr("datetime",nowDate.toUTCString().toLowerCase());
-    taskForm.find(".timeago.task-finished-date").timeago("update",nowDate);
+    taskForm.find(".timeago.task-finished-date").attr("datetime", nowDate.toUTCString().toLowerCase());
+    taskForm.find(".timeago.task-finished-date").timeago("update", nowDate);
   });
 
   $(".task-description").keypress(function (event) {
@@ -63,7 +66,7 @@ $(".sticky").each(function () {
 
   $(".task-menu-content-delete-button").bind("click", function () {
     setTimeout(() => {
-      const taskMenu = $(this).closest(".task-menu-content")
+      const taskMenu = $(this).closest(".task-menu-content");
       $(`#task-${taskMenu.attr("data-tid")}`).remove();
       taskMenu.addClass("hidden");
     }, 100);
@@ -97,14 +100,14 @@ $(".share-with-form").submit(function (evt) {
     url: url,
     data: form.serialize(),
     statusCode: {
-      400: function(data) {
+      400: function (data) {
         $(".sticky-menu-error").text("User does not exits.");
         $(".sticky-menu-error").removeClass("hidden");
       },
-      200: function(data) {
-        appendUser(data.user)
-      }
-    }
+      200: function (data) {
+        appendUser(data.user);
+      },
+    },
   });
 });
 
@@ -113,7 +116,7 @@ $(".sticky-menu-button").bind("click", async function (evt) {
   const target = $(evt.delegateTarget);
   const sticky = target.closest(".sticky");
   const nid = sticky.attr("data-nid");
-  menu.attr("data-nid",nid);
+  menu.attr("data-nid", nid);
   const buttonPosition = target.offset();
   const menuList = menu.find(".shared-with").first();
   menu.find(".shared-with").children().remove();
@@ -127,7 +130,7 @@ $(".sticky-menu-button").bind("click", async function (evt) {
       menu.find(".note-owner").first().text(data.owner);
       menu.find(".note-creation-date").first().text(date);
       menu.find(".color-form").first().attr("action", `/note/editcolor/${data.nid}`);
-      menu.find(".sticky-color-button").attr("data-nid",data.nid);
+      menu.find(".sticky-color-button").attr("data-nid", data.nid);
       menu.find(".sticky-color-button").first()[0].jscolor.fromString(data.color);
       for (let user of data.users) {
         appendUser(user);
@@ -145,7 +148,7 @@ $(".task-menu-button").bind("click", async function (evt) {
   const task = target.closest(".task");
   const menuUsers = menu.find(".task-menu-content-users");
   const tid = task.attr("data-tid");
-  menu.attr("data-tid",tid)
+  menu.attr("data-tid", tid);
   const buttonPosition = target.offset();
   const taskDueDateElement = task.find(".task-form").first().find(".task-due-date");
   menuUsers.children().remove();
@@ -156,15 +159,15 @@ $(".task-menu-button").bind("click", async function (evt) {
     dataType: "json",
     success: function (data) {
       let dueDate = null;
-      if (data.dueDate){
+      if (data.dueDate) {
         dueDate = new Date(data.dueDate);
       }
-      flatPickrInstance.setDate(dueDate,false);
+      flatPickrInstance.setDate(dueDate, false);
       menuUsers.append(`
       <span class="bold">Added by: </span>
       <span>${data.addedBy}</span>
       </br>`);
-      if (data.checked && data.checkedBy){
+      if (data.checked && data.checkedBy) {
         menuUsers.append(`
       <span class="bold">Finished by: </span>
       <span>${data.checkedBy}</span>`);
@@ -181,18 +184,18 @@ $(".remove-due-date").bind("click", async function (evt) {
   const tid = menu.attr("data-tid");
   const task = $(`#task-${tid}`);
   const dueDate = task.find(".timeago.task-due-date");
-  flatPickrInstance.setDate(null,false);
-  dueDate.attr("datetime",null);
-  dueDate.timeago("update",null);
+  flatPickrInstance.setDate(null, false);
+  dueDate.attr("datetime", null);
+  dueDate.timeago("update", null);
   dueDate.text("");
-  dueDate.attr("datetime","");
+  dueDate.attr("datetime", "");
   $.ajax({
     url: `/api/updatetaskdue/${tid}`,
     type: "POST",
     data: {
       tid: tid,
-      dueDate: null
-    }
+      dueDate: null,
+    },
   });
 });
 
@@ -212,16 +215,17 @@ $(document).bind("click", function (evt) {
     !taskMenu.hasClass("hidden") &&
     !(taskMenu.is($(evt.target)) || $.contains(taskMenu[0], evt.target)) &&
     !($(evt.target).hasClass("task-menu-button") || $(evt.target).parent().hasClass("task-menu-button")) &&
-    !($.contains($(".flatpickr-calendar")[0],evt.target))
+    !$.contains($(".flatpickr-calendar")[0], evt.target)
   ) {
     taskMenu.addClass("hidden");
   }
-
 });
 
 $(".sticky-menu-content-delete-form").submit(function (evt) {
   setTimeout(() => {
-    document.location.reload();
+    const nid = $(".sticky-menu-content").attr("data-nid");
+    $(`#sticky-${nid}`).remove();
+    $(".sticky-menu-content").addClass("hidden");
   }, 100);
 });
 
@@ -240,7 +244,9 @@ jscolor.presets.default = {
 function changeColor() {
   const thisElement = $(this.previewElement);
   thisElement.siblings(".color-form-input").val(this.toHEXString());
-  $(`#sticky-${thisElement.attr("data-nid")}`).children(".sticky-container").css("background-color", this.toHEXString());
+  $(`#sticky-${thisElement.attr("data-nid")}`)
+    .children(".sticky-container")
+    .css("background-color", this.toHEXString());
   thisElement.parents(".color-form").submit();
 }
 
@@ -253,38 +259,38 @@ const flatPickrInstance = $(".flatpickr").flatpickr({
   enableTime: true,
   dateFormat: "Y-m-d H:i",
   time_24hr: true,
-  onChange: async function(dates){
+  onChange: async function (dates) {
     const tid = $(".task-menu-content").attr("data-tid");
     const task = $(`#task-${tid}`);
-    task.find(".timeago.task-due-date").attr("datetime",dates[0].toUTCString().toLowerCase());
-    task.find(".timeago.task-due-date").timeago("update",dates[0]);
+    task.find(".timeago.task-due-date").attr("datetime", dates[0].toUTCString().toLowerCase());
+    task.find(".timeago.task-due-date").timeago("update", dates[0]);
     await $.ajax({
       url: `/api/updatetaskdue/${tid}`,
       type: "POST",
       data: {
         tid: tid,
-        dueDate: dates[0]
-      }
+        dueDate: dates[0],
+      },
     });
-  }
+  },
 });
 
 $(".nav-user-menu").bind("click", function (evt) {
-  $(".user-menu").toggleClass("unactive");
+  $(".user-menu").toggleClass("inactive");
 });
 
-$("#avatar-upload").change(function(evt){
+$("#avatar-upload").change(function (evt) {
   let fileUrl = URL.createObjectURL(this.files[0]);
-  $("#avatar-upload-label").css("background-image",`url(${fileUrl})`);
-  $(".user-menu-avatar").find("button").css("display","block");
+  $("#avatar-upload-label").css("background-image", `url(${fileUrl})`);
+  $(".user-menu-avatar").find("button").css("display", "block");
 });
 
 $("#avatar-upload-reset").bind("click", function (evt) {
-  $("#avatar-upload-label").css("background-image",`url("/api/getavatar")`);
-  $(".user-menu-avatar").find("button").css("display","none");
+  $("#avatar-upload-label").css("background-image", `url("/api/getavatar")`);
+  $(".user-menu-avatar").find("button").css("display", "none");
 });
 
-function submitAvatarForm(evt){
+function submitAvatarForm(evt) {
   evt.preventDefault();
   const form = $(this);
   const formInput = form.find("#avatar-upload").first()[0];
@@ -295,15 +301,15 @@ function submitAvatarForm(evt){
     $.ajax({
       type: "POST",
       url: url,
-      data: {avatar: reader.result},
+      data: { avatar: reader.result },
       success: function (data) {
         const refreshCache = Math.floor(Math.random() * 1000000);
-        $("#avatar-upload-label").css("background-image",`url("/api/getavatar?refresh=${refreshCache}")`);
-        $(".nav-user-menu img").attr("src",`/api/getavatar?refresh=${refreshCache}`);
-        $(".user-menu-avatar").find("button").css("display","none");
-      }
+        $("#avatar-upload-label").css("background-image", `url("/api/getavatar?refresh=${refreshCache}")`);
+        $(".nav-user-menu img").attr("src", `/api/getavatar?refresh=${refreshCache}`);
+        $(".user-menu-avatar").find("button").css("display", "none");
+      },
     });
-    };
+  };
   reader.readAsDataURL(file);
 }
 

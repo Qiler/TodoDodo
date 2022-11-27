@@ -12,7 +12,7 @@ router.post("/create/:noteId", async (req, res) => {
   } else {
     req.params.noteId = parseInt(req.params.noteId);
     let note = new Note({ nid: req.params.noteId });
-    await note.CreateTask(req.session.user.uid ,"");
+    await note.CreateTask(req.session.user.uid, "");
     res.redirect("/");
   }
 });

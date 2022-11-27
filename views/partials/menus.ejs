@@ -1,21 +1,21 @@
-<div class="user-menu unactive">
+<div class="user-menu inactive">
   <div class="user-menu-username"><%= user.username %></div>
   <div class="user-menu-contents">
     <form class="user-menu-avatar" action="/user/change-avatar" method="POST">
       <button type="reset" id="avatar-upload-reset"><i class="mdi mdi-close"></i></button>
       <label for="avatar-upload" id="avatar-upload-label"></label>
       <button type="submit" id="avatar-upload-submit"><i class="mdi mdi-upload"></i></button>
-      <input type="file" name="avatar" id="avatar-upload" accept="image/png, image/jpeg">
+      <input type="file" name="avatar" id="avatar-upload" accept="image/png, image/jpeg" />
     </form>
     <div class="user-menu-change-credentials">
       <form class="user-menu-change-email" action="/user/change-email" method="POST">
-        <label for="change-email">Change email:</label></br>
-        <input autocomplete="off" type="email" name="email-change" id="change-email">
+        <label for="change-email">Change email:</label><br />
+        <input autocomplete="off" type="email" name="email_change" id="change-email" />
         <button type="submit"><i class="mdi mdi-arrow-right-thick"></i></button>
       </form>
-      <form class="user-menu-change-password" action="/user/change-password" method="POST">
-        <label for="change-password">Change password:</label></br>
-        <input autocomplete="off" type="password" name="password-change" id="change-password">
+      <form class="user-menu-change-password" action="/user/change_password" method="POST">
+        <label for="change-password">Change password:</label><br />
+        <input autocomplete="off" type="password" name="password-change" id="change-password" />
         <button type="submit"><i class="mdi mdi-arrow-right-thick"></i></button>
       </form>
     </div>
@@ -26,29 +26,29 @@
   <form class="sticky-menu-content-delete-form" action="/note/delete/" method="POST">
     <button class="sticky-menu-content-delete-button" type="submit">Delete note</button>
   </form>
-  <span class="bold unselectable">Owner: </span><span class="note-owner"></span><br/>
-  <span class="bold unselectable">Creation date: </span><span class="note-creation-date"></span><br/>
+  <span class="bold unselectable">Owner: </span><span class="note-owner"></span><br />
+  <span class="bold unselectable">Creation date: </span><span class="note-creation-date"></span><br />
   <form class="color-form" action="/" method="POST">
     <span class="bold unselectable">Color: </span>
-    <input name="color" class="color-form-input" type="hidden"/>
+    <input name="color" class="color-form-input" type="hidden" />
     <button class="sticky-color-button" data-jscolor=""></button>
   </form>
   <div class="share-with">
     <span class="bold unselectable">Shared note with:</span>
-    </br><span class="sticky-menu-error hidden"></span>
+    <br /><span class="sticky-menu-error hidden"></span>
     <form class="share-with-form" action="/note/share/" method="POST">
       <button type="submit"><i class="mdi mdi-plus"></i></button>
-      <input name="user" type="text">
+      <input name="user" type="text" />
     </form>
   </div>
-  <div class="shared-with">
-  </div>
+  <div class="shared-with"></div>
 </div>
 <div class="task-menu-content hidden">
   <form class="task-menu-content-delete-form" action="/task/delete/ task.tid " method="POST">
     <button class="task-menu-content-delete-button" type="submit">Delete task</button>
   </form>
   <div class="task-menu-content-users"></div>
-  <span class="bold">Task due date: </span><span class="task-menu-due-date"></span></br>
-  <button class="remove-due-date" type="submit"><i class="mdi mdi-close"></i></button></button><input class="flatpickr flatpickr-input active" type="text" placeholder="Select Date.." data-id="datetime" readonly="readonly">
+  <span class="bold">Task due date: </span><span class="task-menu-due-date"></span><br />
+  <button class="remove-due-date" type="submit"><i class="mdi mdi-close"></i></button>
+  <input class="flatpickr flatpickr-input active" type="text" placeholder="Select Date.." data-id="datetime" readonly="readonly" />
 </div>

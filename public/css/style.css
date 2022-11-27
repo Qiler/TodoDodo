@@ -46,7 +46,6 @@ main {
   user-select: none;
 }
 
-
 /* Navigation bar */
 
 .nav {
@@ -138,7 +137,7 @@ main {
   filter: brightness(1.2);
 }
 
-.nav-user-menu img{
+.nav-user-menu img {
   height: 100%;
   width: 100%;
 }
@@ -160,7 +159,7 @@ main {
   box-sizing: content-box;
 }
 
-.user-menu.unactive{
+.user-menu.inactive {
   max-height: 0;
   border-width: 0;
 }
@@ -242,7 +241,7 @@ main {
   margin-bottom: 0.5rem;
 }
 
-.user-menu-change-credentials form button{
+.user-menu-change-credentials form button {
   border: solid black 1px;
   height: 1.4rem;
   width: 1.4rem;
@@ -254,14 +253,14 @@ main {
   background-color: var(--lightgreen);
 }
 
-.user-menu-change-credentials form input{
+.user-menu-change-credentials form input {
   border: solid black 1px;
   height: 1.4rem;
   padding: 0;
   box-sizing: border-box;
 }
 
-.user-menu-change-credentials form span{
+.user-menu-change-credentials form span {
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
 }
 
@@ -406,7 +405,7 @@ main {
   content: "";
   width: 100%;
   height: 100%;
-  background-image: url("/images/sticky-shadow2.svg");
+  background-image: url("/images/sticky-shadow.svg");
   background-size: 100% 100%;
   filter: drop-shadow(0.5rem 0.5rem 0.2rem rgba(0, 0, 0, 0.4));
   z-index: -1;
@@ -489,7 +488,8 @@ main {
   border: none;
 }
 
-.sticky-menu-content-delete-button, .task-menu-content-delete-button {
+.sticky-menu-content-delete-button,
+.task-menu-content-delete-button {
   padding: 0;
   margin: 0;
   border: none;
@@ -650,7 +650,7 @@ main {
   height: 0.5rem;
 }
 
-.task-checkbox:not(:checked) ~ .task-due-date[datetime=""] + .task-description-padding{
+.task-checkbox:not(:checked) ~ .task-due-date[datetime=""] + .task-description-padding {
   height: 0rem;
 }
 

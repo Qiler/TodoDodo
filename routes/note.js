@@ -67,13 +67,13 @@ router.post("/share/:noteId", async (req, res) => {
   } else {
     let user = new UserDto({});
     await user.FindByName(req.body.user);
-    if (!user.uid){
+    if (!user.uid) {
       res.sendStatus(400);
     } else {
       req.params.noteId = parseInt(req.params.noteId);
       let note = new Note({ nid: req.params.noteId });
       await note.ShareWith(req.session.user.uid, user.uid);
-      res.json({user});
+      res.json({ user });
     }
   }
 });
