@@ -1,9 +1,9 @@
 const express = require("express");
 const router = express.Router();
 const User = require("../models/User");
-const NoteDTO = require("../models/NoteDto");
-const TaskDTO = require("../models/TaskDTO");
-const UserDTO = require("../models/UserDTO");
+const NoteDto = require("../models/NoteDto");
+const TaskDto = require("../models/TaskDto");
+const UserDto = require("../models/UserDto");
 const fs = require("fs");
 const defaultAvatar = fs.readFileSync("./public/images/default-avatar.png", "base64");
 
@@ -18,7 +18,7 @@ router.get("/getnote/:noteId", async (req, res) => {
     let user = new User(req.session.user);
     req.params.noteId = parseInt(req.params.noteId);
 
-    let note = new NoteDTO({
+    let note = new NoteDto({
       nid: req.params.noteId,
       ownerId: user.uid,
     });
@@ -59,7 +59,7 @@ router.get("/gettask/:taskId", async (req, res) => {
   } else {
     let user = new User(req.session.user);
     req.params.taskId = parseInt(req.params.taskId);
-    let task = new TaskDTO();
+    let task = new TaskDto();
     await task.GetByID(req.params.taskId);
     await task.Init();
     const permissions = await task.CheckPermissions(user.uid);
@@ -77,7 +77,7 @@ router.post("/updatetaskdue/:taskId", async (req, res) => {
   } else {
     let user = new User(req.session.user);
     req.params.taskId = parseInt(req.params.taskId);
-    let task = new TaskDTO();
+    let task = new TaskDto();
     await task.GetByID(req.params.taskId);
     await task.UpdateDueDateByUser(user.uid,new Date(req.body.dueDate));
   }
@@ -88,7 +88,7 @@ router.get("/getuser/:userId", async (req, res) => {
     res.json({});
   } else {
     req.params.userId = parseInt(req.params.userId);
-    let requestedUser = new UserDTO();
+    let requestedUser = new UserDto();
     await requestedUser.FindByID(req.params.userId);
     res.json(requestedUser);
   }
@@ -106,7 +106,7 @@ router.get("/getavatar", async (req, res) => {
 
 router.get("/getavatar/:userId", async (req, res) => {
   req.params.userId = parseInt(req.params.userId);
-  let user = new UserDTO();
+  let user = new UserDto();
   await user.FindByID(req.params.userId);
   if (!user.uid){
     res.sendStatus(404);

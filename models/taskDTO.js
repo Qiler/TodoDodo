@@ -5,7 +5,7 @@ const TaskRepo = require("../repos/TaskRepository");
 const tasks = new TaskRepo(db);
 const Task = require("./Task");
 
-class TaskDTO extends Task {
+class TaskDto extends Task {
   constructor(task) {
     super(task);
     this.tid = task?.tid;
@@ -46,4 +46,4 @@ class TaskDTO extends Task {
   }
 }
 
-module.exports = TaskDTO;
+module.exports = TaskDto;

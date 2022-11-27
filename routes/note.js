@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const User = require("../models/User");
-const UserDTO = require("../models/UserDTO");
+const UserDto = require("../models/UserDto");
 const Note = require("../models/Note");
 
 router.post("/create", async (req, res) => {
@@ -65,7 +65,7 @@ router.post("/share/:noteId", async (req, res) => {
   if (!req.session.loggedIn) {
     res.redirect("/login");
   } else {
-    let user = new UserDTO({});
+    let user = new UserDto({});
     await user.FindByName(req.body.user);
     if (!user.uid){
       res.sendStatus(400);

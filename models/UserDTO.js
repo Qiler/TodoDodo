@@ -3,12 +3,12 @@ const UserRepo = require("../repos/UserRepository");
 const users = new UserRepo(db);
 const NoteRepo = require("../repos/NoteRepository");
 const notes = new NoteRepo(db);
-const Note = require("../models/Note");
-const User = require("../models/User");
+const Note = require("./Note");
+const User = require("./User");
 const fs = require("fs");
 const defaultAvatar = fs.readFileSync("./public/images/default-avatar.png", "base64");
 
-class UserDTO extends User {
+class UserDto extends User {
   constructor(user) {
     super(user);
     this.username = undefined;
@@ -56,4 +56,4 @@ class UserDTO extends User {
   }
 }
 
-module.exports = UserDTO;
+module.exports = UserDto;
