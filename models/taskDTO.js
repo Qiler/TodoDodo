@@ -5,7 +5,7 @@ const NoteRepo = require("../repos/NoteRepository");
 const notes = new NoteRepo(db);
 const TaskRepo = require("../repos/TaskRepository");
 const tasks = new TaskRepo(db);
-const Task = require("../models/Task");
+const Task = require("./Task");
 
 class TaskDTO extends Task {
   constructor(task) {

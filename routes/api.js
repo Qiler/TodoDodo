@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const User = require("../models/User");
 const NoteDTO = require("../models/NoteDto");
-const TaskDTO = require("../models/TaskDto");
+const TaskDTO = require("../models/TaskDTO");
 const UserDTO = require("../models/UserDTO");
 const fs = require("fs");
 const defaultAvatar = fs.readFileSync("./public/images/default-avatar.png", "base64");
@@ -87,7 +87,6 @@ router.get("/getuser/:userId", async (req, res) => {
   if (!req.session.loggedIn) {
     res.json({});
   } else {
-    //let user = new User(req.session.user);
     req.params.userId = parseInt(req.params.userId);
     let requestedUser = new UserDTO();
     await requestedUser.FindByID(req.params.userId);

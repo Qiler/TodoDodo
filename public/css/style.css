@@ -1,9 +1,9 @@
-/* Handwritten */
+/* Handwritten fonts */
 /* @import url("https://fonts.cdnfonts.com/css/zai-bazgroly");
 @import url("https://fonts.cdnfonts.com/css/fauves-book");
 @import url("https://fonts.cdnfonts.com/css/le-sofia"); */
 @import url("https://fonts.cdnfonts.com/css/travel-october");
-/* Cursives */
+/* Cursive fonts */
 /* @import url("https://fonts.cdnfonts.com/css/mixscribble");
 @import url("https://fonts.cdnfonts.com/css/amigho");
 @import url("https://fonts.cdnfonts.com/css/autumn-monoline");
@@ -38,9 +38,20 @@ body {
   background-size: 15rem;
 }
 
+main {
+  height: calc(100% - 6rem - 1px);
+  padding-top: 1.5rem;
+}
+
 .hidden {
   display: none;
 }
+
+.bold {
+  font-weight: 900;
+}
+
+/* Navigation bar */
 
 .nav {
   height: 3rem;
@@ -50,7 +61,6 @@ body {
   position: fixed;
   top: 0;
   z-index: 1000;
-  /* background-image: url(/images/wood4.jpg); */
   background-color: rgba(255, 255, 255, 0.774);
   border-bottom: 1px solid var(--black);
   box-shadow: 0.4rem 0.4rem 1rem rgba(0, 0, 0, 0.4);
@@ -141,7 +151,6 @@ body {
   position: absolute;
   background: rgba(255, 255, 255, 1);
   border: solid black 1px;
-  /* border-radius: 0.5rem; */
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   z-index: 1100;
   white-space: nowrap;
@@ -174,37 +183,6 @@ body {
   user-select: none;
 }
 
-
-
-/* .filepond {
-  max-height: 5rem;
-  max-width: 5rem;
-  margin: auto;
-}
-
-.filepond:hover {
-  filter: brightness(1.2);
-}
-
-.filepond--panel-root {
-  background-image: url("/api/getavatar");
-  background-size: cover;
-  border-radius: 0 !important;
-  border: solid black 1px;
-}
-
-.filepond--credits {
-  display: none;
-}
-
-.filepond--list {
-  width: 100%;
-  height: 100%;
-  top: 0 !important;
-  left: 0 !important;
-  position: absolute !important;
-}
- */
 .user-menu-contents {
   padding: 1rem;
   min-width: 15rem;
@@ -310,12 +288,8 @@ body {
   background-color: var(--lightred);
 }
 
-main {
-  height: calc(100% - 6rem - 1px);
-  padding-top: 1.5rem;
-}
-
 /* LOGIN PAGE */
+
 .login-div {
   background-color: rgba(0, 0, 0, 0.25);
   position: absolute;
@@ -406,18 +380,21 @@ main {
 }
 
 /*  Sticky Notes */
+
 .container {
   margin: 3rem;
-  /*   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(25rem, 1fr));
-  grid-row: auto;
-  grid-gap: 1rem;
-  align-items: start; */
   -moz-columns: 8 25rem;
   -webkit-columns: 8 25rem;
   columns: 8 25rem;
   column-gap: 1rem;
   overflow: visible;
+
+  /* Alternative way to arrange sticky notes */
+  /*   display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(25rem, 1fr));
+  grid-row: auto;
+  grid-gap: 1rem;
+  align-items: start; */
 }
 
 .sticky {
@@ -426,51 +403,6 @@ main {
   min-height: 8rem;
   margin-bottom: 1rem;
   break-inside: avoid;
-}
-
-.add-note-form {
-  max-width: 30rem;
-  margin-bottom: 1rem;
-  break-inside: avoid;
-}
-
-.add-note-button {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 20rem;
-  width: 100%;
-  background-color: transparent;
-  border: none;
-  cursor: pointer;
-}
-
-.add-note-button:hover .add-note-button-plus{
-  scale: 1.1;
-  opacity: 60%;
-}
-
-.add-note-button-plus {
-  background-color: rgb(0, 0, 0);
-  border-radius: 50%;
-  height: 5rem;
-  width: 5rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  opacity: 50%;
-}
-
-.add-note-button-plus-dash{
-  background-color: rgb(255, 255, 255);
-  height: 3.5rem;
-  width: 0.7rem;
-  position: absolute;
-  border-radius: 0.3rem;
-}
-
-.add-note-button-plus-dash:nth-child(1){
-  rotate: 90deg;
 }
 
 .sticky-container {
@@ -504,6 +436,8 @@ main {
   font: 20px "Travel October", sans-serif;
 }
 
+/* Sticky menu */
+
 .sticky-menu {
   position: absolute;
   top: 0.5rem;
@@ -536,21 +470,12 @@ main {
   position: absolute;
   background: rgba(255, 255, 255, 1);
   border: solid black 1px;
-  /* border-radius: 0.5rem; */
   padding: 1rem;
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   z-index: 1001;
   white-space: nowrap;
   break-inside: avoid;
   overflow: hidden;
-}
-
-/* .sticky-menu:hover > .sticky-menu-content {
-  display: inline-block;
-} */
-
-.bold {
-  font-weight: 900;
 }
 
 .sticky-menu span {
@@ -650,7 +575,9 @@ main {
   background: gray;
 }
 
-.sticky-list {
+/* Tasks */
+
+.task-list {
   min-height: 2rem;
   margin-top: 1rem;
   padding: 0 8%;
@@ -800,11 +727,12 @@ main {
   font-size: 1rem;
 }
 
+/* Task menu */
+
 .task-menu-content {
   position: absolute;
   background: rgb(255, 255, 255);
   border: solid black 1px;
-  /* border-radius: 0.5rem; */
   padding: 1rem;
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   z-index: 1001;

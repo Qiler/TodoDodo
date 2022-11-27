@@ -8,7 +8,7 @@
               <input class="sticky-title" name="name" type="text" value="<%= note.name %>" autocomplete="false" />
             </form>
           </div>
-          <div class="sticky-list">
+          <div class="task-list">
             <% note.tasks?.forEach(task => { %>
               <div class="task" id="task-<%= task.tid %>" data-tid="<%= task.tid %>">
                 <form class="task-form" action="/task/edit/<%= task.tid %>" autocomplete="off" method="POST">
@@ -21,15 +21,6 @@
                   <div class="task-description-padding"></div>
                 </form>
                 <button class="task-menu-button"><i class="mdi mdi-cog"></i></button>
-<!--                 <div class="task-menu-content">
-                  <form action="/task/delete/<%= task.tid %>" method="POST">
-                    <button class="sticky-menu-content-delete-button" type="submit">Delete task</button>
-                  </form>
-                  <span class="bold">Task due date:</span>
-                  <form action="/task/setdue/<%= task.tid %> ">
-                    <input class="flatpickr flatpickr-input active" type="text" placeholder="Select Date.." data-id="datetime" readonly="readonly">
-                  </form>
-                </div> -->
               </div>
             <% }) %>
           </div>
@@ -46,13 +37,5 @@
         </div>
       </div>
     <% }) %>
-<!--     <form action="/note/create" method="post" class="add-note-form">
-      <button type="submit" class="add-note-button">
-        <div class="add-note-button-plus">
-          <div class="add-note-button-plus-dash"></div>
-          <div class="add-note-button-plus-dash"></div>
-        </div>
-      </button>
-    </form> -->
   </div>
 </div>
