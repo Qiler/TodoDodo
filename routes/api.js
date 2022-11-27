@@ -1,5 +1,6 @@
 const express = require("express");
 const router = express.Router();
+const app = express();
 const User = require("../models/User");
 const NoteDto = require("../models/NoteDto");
 const TaskDto = require("../models/TaskDto");
@@ -12,86 +13,70 @@ router.get("/", (req, res) => {
 });
 
 router.get("/getnote/:noteId", async (req, res) => {
-  if (!req.session.loggedIn) {
-    res.json({});
-  } else {
-    let user = new User(req.session.user);
-    req.params.noteId = parseInt(req.params.noteId);
+  let user = new User(req.session.user);
+  req.params.noteId = parseInt(req.params.noteId);
 
-    let note = new NoteDto({
-      nid: req.params.noteId,
-      ownerId: user.uid,
-    });
+  let note = new NoteDto({
+    nid: req.params.noteId,
+    ownerId: user.uid,
+  });
 
-    await note.GetByID(req.params.noteId);
-    await note.Init();
-    await note.GetTasks();
-    const permissions = await note.CheckPermissions(user.uid);
-    const users = [];
-    if (permissions) {
-      for (let user of note.users) {
-        user = {
-          uid: user.uid,
-          username: user.username,
-          avatar: user.avatar,
-        };
-        users.push(user);
-      }
-      res.json({
-        nid: note.nid,
-        ownerId: note.ownerId,
-        owner: note.owner,
-        creationDate: note.creationDate,
-        name: note.name,
-        color: note.color,
-        tasks: note.tasks,
-        users: users,
-      });
-    } else {
-      res.json({});
+  await note.GetByID(req.params.noteId);
+  await note.Init();
+  await note.GetTasks();
+  const permissions = await note.CheckPermissions(user.uid);
+  const users = [];
+  if (permissions) {
+    for (let user of note.users) {
+      user = {
+        uid: user.uid,
+        username: user.username,
+        avatar: user.avatar,
+      };
+      users.push(user);
     }
+    res.json({
+      nid: note.nid,
+      ownerId: note.ownerId,
+      owner: note.owner,
+      creationDate: note.creationDate,
+      name: note.name,
+      color: note.color,
+      tasks: note.tasks,
+      users: users,
+    });
+  } else {
+    res.json({});
   }
 });
 
 router.get("/gettask/:taskId", async (req, res) => {
-  if (!req.session.loggedIn) {
-    res.json({});
+  let user = new User(req.session.user);
+  req.params.taskId = parseInt(req.params.taskId);
+  let task = new TaskDto();
+  await task.GetByID(req.params.taskId);
+  await task.Init();
+  const permissions = await task.CheckPermissions(user.uid);
+  if (permissions) {
+    res.json(task);
   } else {
-    let user = new User(req.session.user);
-    req.params.taskId = parseInt(req.params.taskId);
-    let task = new TaskDto();
-    await task.GetByID(req.params.taskId);
-    await task.Init();
-    const permissions = await task.CheckPermissions(user.uid);
-    if (permissions) {
-      res.json(task);
-    } else {
-      res.json({});
-    }
+    res.json({});
   }
 });
 
 router.post("/updatetaskdue/:taskId", async (req, res) => {
-  if (!req.session.loggedIn) {
-    res.json({});
-  } else {
-    let user = new User(req.session.user);
-    req.params.taskId = parseInt(req.params.taskId);
-    let task = new TaskDto();
-    await task.GetByID(req.params.taskId);
-    await task.UpdateDueDateByUser(user.uid, new Date(req.body.dueDate));
-  }
+  let user = new User(req.session.user);
+  req.params.taskId = parseInt(req.params.taskId);
+  let task = new TaskDto();
+  await task.GetByID(req.params.taskId);
+  await task.UpdateDueDateByUser(user.uid, new Date(req.body.dueDate));
 });
 
 router.get("/getuser/:userId", async (req, res) => {
-  if (!req.session.loggedIn) {
-    res.json({});
-  } else {
-    req.params.userId = parseInt(req.params.userId);
-    let requestedUser = new UserDto();
-    await requestedUser.FindByID(req.params.userId);
-    res.json(requestedUser);
-  }
+  req.params.userId = parseInt(req.params.userId);
+  let requestedUser = new UserDto();
+  await requestedUser.FindByID(req.params.userId);
+  res.json(requestedUser);
 });
 
 router.get("/getavatar", async (req, res) => {

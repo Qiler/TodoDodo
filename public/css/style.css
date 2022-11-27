@@ -53,8 +53,7 @@ main {
   max-height: 3rem;
   width: 100%;
   display: flex;
-  position: fixed;
-  top: 0;
+  position: sticky;
   z-index: 1000;
   background-color: rgba(255, 255, 255, 0.774);
   border-bottom: 1px solid var(--black);

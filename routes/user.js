@@ -6,7 +6,7 @@ const sharp = require("sharp");
 
 router.post("/change-avatar", async (req, res) => {
   if (!req.session.loggedIn) {
-    res.redirect("/login");
+    res.sendStatus(401);
   } else {
     const user = new User(req.session.user);
     const image = req.body.avatar;
@@ -29,7 +29,7 @@ router.post("/change-avatar", async (req, res) => {
 
 router.post("/change-email", async (req, res) => {
   if (!req.session.loggedIn) {
-    res.redirect("/login");
+    res.sendStatus(401);
   } else {
     const user = new User(req.session.user);
     user.UpdateEmail(req.body.email_change);
@@ -40,7 +40,7 @@ router.post("/change-email", async (req, res) => {
 
 router.post("/change-password", async (req, res) => {
   if (!req.session.loggedIn) {
-    res.redirect("/login");
+    res.sendStatus(401);
   } else {
     const user = new User(req.session.user);
     let password = await bcrypt.hash(req.body.password_change, 10);
