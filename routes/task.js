@@ -25,7 +25,7 @@ router.post("/create/:noteId", async (req, res) => {
   if (hasPermissions) {
     task = await note.CreateTask(req.session.user.uid, "");
     if (task) {
-      res.status(201).json({ note: note, task: task });
+      return res.status(201).json({ note: note, task: task });
     } else {
       return res.status(404).json({ error: "Unable to create task." });
     }

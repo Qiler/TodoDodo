@@ -18,32 +18,48 @@ class Task {
   }
 
   async UpdateByUser(uid, checked, description) {
-    let noteWithPerms = await notes.CheckPermissions(this.nid, uid);
-    if (noteWithPerms?.nid) {
-      return await tasks.Update(this.tid, checked, description, uid);
+    try {
+      let noteWithPerms = await notes.CheckPermissions(this.nid, uid);
+      if (noteWithPerms?.nid) {
+        return await tasks.Update(this.tid, checked, description, uid);
+      }
+      return null;
+    } catch {
+      return null;
     }
-    return null;
   }
 
   async UpdateDueDateByUser(uid, dueDate) {
-    let noteWithPerms = await notes.CheckPermissions(this.nid, uid);
-    if (noteWithPerms?.nid) {
-      return await tasks.UpdateDueDate(this.tid, dueDate);
+    try {
+      let noteWithPerms = await notes.CheckPermissions(this.nid, uid);
+      if (noteWithPerms?.nid) {
+        return await tasks.UpdateDueDate(this.tid, dueDate);
+      }
+      return null;
+    } catch {
+      return null;
     }
-    return null;
   }
 
   async DeleteByUser(uid) {
-    let noteWithPerms = await notes.CheckPermissions(this.nid, uid);
-    if (noteWithPerms?.nid) {
-      return await tasks.DeleteTask(this.tid);
+    try {
+      let noteWithPerms = await notes.CheckPermissions(this.nid, uid);
+      if (noteWithPerms?.nid) {
+        return await tasks.DeleteTask(this.tid);
+      }
+      return null;
+    } catch {
+      return null;
     }
-    return null;
   }
 
   async CheckPermissions(uid) {
-    let hasPermissions = await notes.CheckPermissions(this.nid, uid);
-    return hasPermissions;
+    try {
+      let hasPermissions = await notes.CheckPermissions(this.nid, uid);
+      return hasPermissions;
+    } catch {
+      return null;
+    }
   }
 }
 

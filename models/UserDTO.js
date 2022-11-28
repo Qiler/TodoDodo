@@ -21,16 +21,24 @@ class UserDto extends User {
   }
 
   async GetNotes() {
-    const noteDb = await notes.GetByUid(this.uid);
-    let noteArray = [];
-    noteDb?.forEach((note) => {
-      noteArray.push(new Note(note));
-    });
-    return noteArray;
+    try {
+      const noteDb = await notes.GetByUid(this.uid);
+      let noteArray = [];
+      noteDb?.forEach((note) => {
+        noteArray.push(new Note(note));
+      });
+      return noteArray;
+    } catch {
+      return null;
+    }
   }
 
   async CreateNote(name, color = "#feff9c") {
-    return await notes.AddNote(this.uid, name, color);
+    try {
+      return await notes.AddNote(this.uid, name, color);
+    } catch {
+      return null;
+    }
   }
 
   async FindByName(name) {

@@ -21,31 +21,51 @@ class User {
   }
 
   async GetNotes() {
-    const noteDb = await notes.GetByUid(this.uid);
-    let noteArray = [];
-    noteDb?.forEach((note) => {
-      noteArray.push(new Note(note));
-    });
-    return noteArray;
+    try {
+      const noteDb = await notes.GetByUid(this.uid);
+      let noteArray = [];
+      noteDb?.forEach((note) => {
+        noteArray.push(new Note(note));
+      });
+      return noteArray;
+    } catch {
+      return null;
+    }
   }
 
   async CreateNote(name, color = "#feff9c") {
-    return await notes.AddNote(this.uid, name, color);
+    try {
+      return await notes.AddNote(this.uid, name, color);
+    } catch {
+      return null;
+    }
   }
 
-  async UpdateEmail(email){
-    this.email = email;
-    return await users.UpdateEmail(this.uid,email);
+  async UpdateEmail(email) {
+    try {
+      this.email = email;
+      return await users.UpdateEmail(this.uid, email);
+    } catch {
+      return null;
+    }
   }
 
-  async UpdatePassword(password){
-    this.password = password;
-    return await users.UpdatePassword(this.uid,password);
+  async UpdatePassword(password) {
+    try {
+      this.password = password;
+      return await users.UpdatePassword(this.uid, password);
+    } catch {
+      return null;
+    }
   }
 
-  async UpdateAvatar(avatar){
-    this.avatar = avatar;
-    return await users.UpdateAvatar(this.uid,avatar);
+  async UpdateAvatar(avatar) {
+    try {
+      this.avatar = avatar;
+      return await users.UpdateAvatar(this.uid, avatar);
+    } catch {
+      return null;
+    }
   }
 }
 
