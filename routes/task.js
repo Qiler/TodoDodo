@@ -20,8 +20,8 @@ router.post("/create/:noteId", async (req, res) => {
     return res.status(400).json({ error: "Missing note ID." });
   }
   const note = new Note({ nid: req.params.noteId });
-  const permissions = note.CheckPermissions(req.session.user.uid);
-  if (permissions) {
+  const hasPermissions = note.CheckPermissions(req.session.user.uid);
+  if (hasPermissions) {
     task = await note.CreateTask(req.session.user.uid, "");
     if (task) {
       res.status(201).json({ note: note, task: task });

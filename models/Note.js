@@ -86,8 +86,8 @@ class Note {
   }
 
   async CheckPermissions(uid) {
-    const permissions = await notes.CheckPermissions(this.nid, uid);
-    return permissions;
+    const hasPermissions = await notes.CheckPermissions(this.nid, uid);
+    return hasPermissions;
   }
 }
 

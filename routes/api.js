@@ -37,10 +37,10 @@ router.get("/getnote/:noteId", async (req, res) => {
   await note.GetByID(req.params.noteId);
   await note.Init();
   await note.GetTasks();
-  const permissions = await note.CheckPermissions(user.uid);
+  const hasPermissions = await note.CheckPermissions(user.uid);
   const users = [];
 
-  if (permissions) {
+  if (hasPermissions) {
     for (let u of note.users) {
       u = {
         uid: u.uid,
@@ -73,8 +73,8 @@ router.get("/gettask/:taskId", async (req, res) => {
   const task = new TaskDto();
   await task.GetByID(req.params.taskId);
   await task.Init();
-  const permissions = await task.CheckPermissions(user.uid);
-  if (permissions) {
+  const hasPermissions = await task.CheckPermissions(user.uid);
+  if (hasPermissions) {
     return res.status(200).json(task);
   }
   return res.status(401).json({});
