@@ -4,61 +4,105 @@ class TaskRepository {
   }
 
   async GetAll() {
-    const result = await this.db.queryAsync("SELECT * FROM tasks WHERE", []);
-    return result?.rows;
+    try {
+      const result = await this.db.queryAsync("SELECT * FROM tasks WHERE", []);
+      return result?.rows;
+    } catch {
+      return null;
+    }
   }
 
   async GetByNid(nid) {
-    const result = await this.db.queryAsync("SELECT * FROM tasks WHERE nid = ?", [nid]);
-    return result?.rows;
+    try {
+      const result = await this.db.queryAsync("SELECT * FROM tasks WHERE nid = ?", [nid]);
+      return result?.rows;
+    } catch {
+      return null;
+    }
   }
 
   async GetByTid(tid) {
-    const result = await this.db.queryAsync("SELECT * FROM tasks WHERE tid = ? LIMIT 1", [tid]);
-    if (result && result.rows && result.rows[0]) {
-      return result.rows[0];
+    try {
+      const result = await this.db.queryAsync("SELECT * FROM tasks WHERE tid = ? LIMIT 1", [tid]);
+      if (result && result.rows && result.rows[0]) {
+        return result.rows[0];
+      }
+      return null;
+    } catch {
+      return null;
     }
-    return null;
   }
 
   async AddTask(nid, addedBy, description) {
-    const result = await this.db.queryAsync("INSERT INTO tasks (nid,addedBy,description) VALUES (?,?,?) RETURNING tid", [nid, addedBy, description]);
-    if (result && result.rows && result.rows[0]) {
-      return result.rows[0];
+    try {
+      const result = await this.db.queryAsync("INSERT INTO tasks (nid,addedBy,description) VALUES (?,?,?) RETURNING tid", [nid, addedBy, description]);
+      if (result && result.rows && result.rows[0]) {
+        return result.rows[0];
+      }
+      return null;
+    } catch {
+      return null;
     }
-    return null;
   }
 
   async DeleteTask(tid) {
-    const result = await this.db.runAsync("DELETE FROM tasks WHERE tid = ?", [tid]);
-    return result;
+    try {
+      const result = await this.db.runAsync("DELETE FROM tasks WHERE tid = ?", [tid]);
+      return result;
+    } catch {
+      return null;
+    }
   }
 
   async Update(tid, checked, description, checkedBy) {
-    if (checked == true) {
-      await this.db.runAsync("UPDATE tasks SET checkedBy = ?, finishedDate = ((strftime('%s') + (strftime('%f') - strftime('%S'))) * 1000) WHERE tid = ?", [checkedBy, tid]);
+    try {
+      if (checked == true) {
+        await this.db.runAsync("UPDATE tasks SET checkedBy = ?, finishedDate = ((strftime('%s') + (strftime('%f') - strftime('%S'))) * 1000) WHERE tid = ?", [checkedBy, tid]);
+      }
+      return await this.db.runAsync("UPDATE tasks SET description = ?, checked = ? WHERE tid = ?", [description, checked, tid]);
+    } catch {
+      return null;
     }
-    return await this.db.runAsync("UPDATE tasks SET description = ?, checked = ? WHERE tid = ?", [description, checked, tid]);
   }
 
   async UpdateDueDate(tid, date) {
-    return await this.db.runAsync("UPDATE tasks SET dueDate = ? WHERE tid = ?", [date, tid]);
+    try {
+      return await this.db.runAsync("UPDATE tasks SET dueDate = ? WHERE tid = ?", [date, tid]);
+    } catch {
+      return null;
+    }
   }
 
   async UpdateFinishedDate(tid, date) {
-    return await this.db.runAsync("UPDATE tasks SET finishedDate = ? WHERE tid = ?", [date, tid]);
+    try {
+      return await this.db.runAsync("UPDATE tasks SET finishedDate = ? WHERE tid = ?", [date, tid]);
+    } catch {
+      return null;
+    }
   }
 
   async UpdateChecked(tid, checked) {
-    return await this.db.runAsync("UPDATE tasks SET checked = ? WHERE tid = ?", [checked, tid]);
+    try {
+      return await this.db.runAsync("UPDATE tasks SET checked = ? WHERE tid = ?", [checked, tid]);
+    } catch {
+      return null;
+    }
   }
 
   async UpdateCheckedBy(tid, uid) {
-    return await this.db.runAsync("UPDATE tasks SET description = ? WHERE tid = ?", [uid, tid]);
+    try {
+      return await this.db.runAsync("UPDATE tasks SET description = ? WHERE tid = ?", [uid, tid]);
+    } catch {
+      return null;
+    }
   }
 
   async UpdateDescription(tid, description) {
-    return await this.db.runAsync("UPDATE tasks SET description = ? WHERE tid = ?", [description, tid]);
+    try {
+      return await this.db.runAsync("UPDATE tasks SET description = ? WHERE tid = ?", [description, tid]);
+    } catch {
+      return null;
+    }
   }
 }
 
