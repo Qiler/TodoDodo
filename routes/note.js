@@ -23,7 +23,7 @@ router.post("/editname/:noteId", async (req, res) => {
     return res.status(400).json({ error: "Missing note ID." });
   }
 
-  if (req.body.name.length() > 40) {
+  if (req.body.name.length > 40) {
     req.body.name = req.body.name.slice(0, 40);
   }
 

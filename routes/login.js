@@ -41,7 +41,7 @@ router.post("/", async (req, res) => {
 });
 
 function throwError(req, res, err) {
-  res.render("login", { errorMessage: err, formInput: { username: req.body.username } });
+  return res.render("login", { errorMessage: err, formInput: { username: req.body.username } });
 }
 
 module.exports = router;

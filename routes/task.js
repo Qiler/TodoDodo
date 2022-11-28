@@ -45,7 +45,7 @@ router.post("/edit/:taskId", async (req, res) => {
     task = new Task(task);
     const updatedTask = await task.UpdateByUser(req.session.user.uid, req.body.checked, req.body.description);
     if (updatedTask) {
-      res.status(200).redirect("/");
+      return res.status(200).redirect("/");
     } else {
       return res.status(401).json({ error: "Unable to edit task." });
     }
