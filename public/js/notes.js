@@ -1,3 +1,5 @@
+const userID = parseInt($("main").attr("data-userid"));
+
 function ranomSeeded(seed) {
   seed = (seed ^ 0xdeadbeef) % 100;
   seed = Math.sin(seed++) * 1000;
@@ -16,32 +18,33 @@ function submitForm(evt) {
   });
 }
 
-function appendUser(user) {
+function appendUser(user, ownerId) {
   const nid = $(".sticky-menu-content").attr("data-nid");
   const menu = $(".sticky-menu-content");
   const menuList = menu.find(".shared-with").first();
   const newUsermenuEntry = menuList.append(`
   <div class="shared-with-container">
-    <form action="note/removeaccess/${nid}" method="POST">
-      <input type="hidden" name="userid" value="${user.uid}">
-      <button class="shared-with-button" type="submit"><i class="mdi mdi-close"></i></button>
-    </form>
     <img class="shared-with-avatar" src="api/getavatar/${user.uid}"></img>
     <span class="shared-with-username">${user.username}</span>
   </div>
   `);
-  newUsermenuEntry
-    .find("form")
-    .first()
-    .submit(function (evt) {
+  if (ownerId == userID) {
+    const newUsermenuEntryForm = newUsermenuEntry.find(".shared-with-container").last().prepend(`
+    <form action="note/removeaccess/${nid}" method="POST">
+      <input type="hidden" name="userid" value="${user.uid}">
+      <button class="shared-with-button" type="submit"><i class="mdi mdi-close"></i></button>
+    </form>
+    `);
+    newUsermenuEntryForm.find("form").submit(function (evt) {
       submitForm(evt);
       setTimeout(() => {
         $(this).closest(".shared-with-container").remove();
       }, 100);
     });
+  }
 }
 
-$(".sticky").each(function () {
+$(".sticky").each(function (index, value) {
   const sticky = $(this);
   const number = ranomSeeded(parseInt(sticky.data("nid")) * 1000000);
   const rotation = (number - 0.5) * 10;
@@ -54,15 +57,17 @@ $(".sticky").each(function () {
     taskForm.find(".timeago.task-finished-date").timeago("update", nowDate);
   });
 
-  $(".task-description").keypress(function (event) {
-    const parent = $(this).parent();
-    const textValue = parent.find(".task-description").first().text();
-    parent.find(".task-description-hidden").first().val(textValue);
-    if (event.key === "Enter") {
-      event.preventDefault();
-      parent.submit();
-    }
-  });
+  $(value)
+    .find(".task-description")
+    .keypress(function (event) {
+      const parent = $(this).parent();
+      const textValue = parent.find(".task-description").first().text();
+      parent.find(".task-description-hidden").first().val(textValue);
+      if (event.key === "Enter") {
+        event.preventDefault();
+        parent.submit();
+      }
+    });
 
   $(".task-menu-content-delete-button").bind("click", function () {
     setTimeout(() => {
@@ -104,8 +109,8 @@ $(".share-with-form").submit(function (evt) {
         $(".sticky-menu-error").text("User does not exits.");
         $(".sticky-menu-error").removeClass("hidden");
       },
-      200: function (data) {
-        appendUser(data.user);
+      201: function (data) {
+        appendUser(data.user, userID);
       },
     },
   });
@@ -119,6 +124,7 @@ $(".sticky-menu-button").bind("click", async function (evt) {
   menu.attr("data-nid", nid);
   const buttonPosition = target.offset();
   const menuList = menu.find(".shared-with").first();
+  menu.find(".share-with-form").addClass("hidden");
   menu.find(".shared-with").children().remove();
   await $.ajax({
     url: `/api/getnote/${nid}`,
@@ -127,13 +133,18 @@ $(".sticky-menu-button").bind("click", async function (evt) {
     success: function (data) {
       const date = new Date(parseInt(data.creationDate)).toLocaleString();
       menu.find(".sticky-menu-content-delete-form").first().attr("action", `/note/delete/${data.nid}`);
-      menu.find(".note-owner").first().text(data.owner);
+      menu.find(".note-owner").first().text(data.ownersUsername);
       menu.find(".note-creation-date").first().text(date);
       menu.find(".color-form").first().attr("action", `/note/editcolor/${data.nid}`);
       menu.find(".sticky-color-button").attr("data-nid", data.nid);
       menu.find(".sticky-color-button").first()[0].jscolor.fromString(data.color);
+      if (data.ownerId == userID) {
+        menu.find(".share-with-form").removeClass("hidden");
+      }
       for (let user of data.users) {
-        appendUser(user);
+        if (userID != user.uid) {
+          appendUser(user, data.ownerId);
+        }
       }
     },
   });
@@ -190,7 +201,7 @@ $(".remove-due-date").bind("click", async function (evt) {
   dueDate.text("");
   dueDate.attr("datetime", "");
   $.ajax({
-    url: `/api/updatetaskdue/${tid}`,
+    url: `/task/updatetaskdue/${tid}`,
     type: "POST",
     data: {
       tid: tid,
@@ -265,7 +276,7 @@ const flatPickrInstance = $(".flatpickr").flatpickr({
     task.find(".timeago.task-due-date").attr("datetime", dates[0].toUTCString().toLowerCase());
     task.find(".timeago.task-due-date").timeago("update", dates[0]);
     await $.ajax({
-      url: `/api/updatetaskdue/${tid}`,
+      url: `/task/updatetaskdue/${tid}`,
       type: "POST",
       data: {
         tid: tid,

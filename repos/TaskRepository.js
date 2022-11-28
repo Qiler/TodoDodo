@@ -30,7 +30,8 @@ class TaskRepository {
   }
 
   async DeleteTask(tid) {
-    return await this.db.runAsync("DELETE FROM tasks WHERE tid = ?", [tid]);
+    const result = await this.db.runAsync("DELETE FROM tasks WHERE tid = ?", [tid]);
+    return result;
   }
 
   async Update(tid, checked, description, checkedBy) {

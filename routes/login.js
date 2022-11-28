@@ -10,31 +10,37 @@ router.get("/", async (req, res) => {
   res.render("login");
 });
 
-router.post("/auth", async (req, res) => {
-  try {
-    let dbUser = await users.GetByUsername(req.body.username);
-    if (dbUser?.uid == undefined) {
-      throw "Unable to find user in database.";
-    }
-    let user = new User(dbUser);
-    let loggedIn = await bcrypt.compare(req.body.password, dbUser.password);
-    if (loggedIn) {
-      req.session.regenerate(function (err) {
-        if (err) next(err);
-        req.session.loggedIn = true;
-        req.session.user = user;
-        req.session.save(function (err) {
-          if (err) return next(err);
-          res.redirect("/");
-        });
+router.post("/", async (req, res) => {
+  if (!req.body.username) {
+    return throwError(req, res, "Username cannot be blank.");
+  }
+  if (!req.body.username) {
+    return throwError(req, res, "Password cannot be blank.");
+  }
+
+  let dbUser = await users.GetByUsername(req.body.username);
+  if (dbUser?.uid == undefined) {
+    return throwError(req, res, "Incorrect Username or Password.");
+  }
+  let user = new User(dbUser);
+  let isPasswordCorrect = await bcrypt.compare(req.body.password, dbUser.password);
+  if (isPasswordCorrect) {
+    req.session.regenerate(function (err) {
+      if (err) return next(err);
+      req.session.loggedIn = true;
+      req.session.user = user;
+      req.session.save(function (err) {
+        if (err) return next(err);
+        res.redirect("/");
       });
-    } else {
-      throw "Incorrect password.";
-    }
-  } catch (err) {
-    console.error(err);
-    res.render("login", { errorMessage: err, formInput: { username: req.body.username } });
+    });
+  } else {
+    return throwError(req, res, "Incorrect Username or Password.");
   }
 });
+
+function throwError(req, res, err) {
+  res.render("login", { errorMessage: err, formInput: { username: req.body.username } });
+}
 
 module.exports = router;

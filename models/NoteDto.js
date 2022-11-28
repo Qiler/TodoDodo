@@ -5,12 +5,12 @@ const NoteRepo = require("../repos/NoteRepository");
 const notes = new NoteRepo(db);
 const Note = require("../models/Note");
 
-class NoteDto extends Note{
-  constructor(note){
-    super(note)
+class NoteDto extends Note {
+  constructor(note) {
+    super(note);
     this.nid = note?.nid;
     this.ownerId = note?.ownerId;
-    this.owner = "Unknown user";
+    this.ownersUsername = "Unknown user";
     if (note?.creationDate instanceof Date) {
       this.creationDate = note?.creationDate;
     } else {
@@ -18,25 +18,25 @@ class NoteDto extends Note{
     }
     this.name = note?.name;
     this.color = note?.color;
-    this.users = []
+    this.users = [];
   }
 
-  async GetByID(nid){
+  async GetByID(nid) {
     const note = await notes.GetByNid(nid);
-    try{
+    try {
       this.nid = note.nid;
       this.ownerId = note.ownerId;
       this.creationDate = note.creationDate;
       this.name = note.name;
       this.color = note.color;
     } catch {
-      console.error(`Unable to find note with id: ${nid}`)
+      console.error(`Unable to find note with id: ${nid}`);
     }
   }
 
-  async Init(){
-    this.owner = (await users.GetByUid(this.ownerId)).username;
-    this.users = (await users.GetByNoteAccess(this.nid));
+  async Init() {
+    this.ownersUsername = (await users.GetByUid(this.ownerId)).username;
+    this.users = await users.GetByNoteAccess(this.nid);
   }
 }
 

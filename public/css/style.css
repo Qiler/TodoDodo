@@ -501,7 +501,7 @@ main {
 
 .share-with-form {
   margin-top: 0.2rem;
-  margin-bottom: 0.3rem;
+  margin-bottom: 0.2rem;
 }
 
 .share-with-form input {
@@ -530,6 +530,7 @@ main {
 
 .shared-with-container {
   display: flex;
+  margin-top: 0.2rem;
 }
 
 .shared-with form button {

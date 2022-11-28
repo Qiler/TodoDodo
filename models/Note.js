@@ -33,16 +33,28 @@ class Note {
     return await notes.DeleteNote(this.nid);
   }
 
-  async DeleteByUser(uid) {
-    let noteWithPerms = await notes.CheckPermissions(this.nid, uid);
+  async CreateTaskByUser(uid, description) {
+    const noteWithPerms = await notes.CheckPermissions(this.nid, uid);
     if (noteWithPerms?.nid) {
-      return await notes.DeleteNote(noteWithPerms.nid);
+      return await tasks.AddTask(this.nid, uid, description);
+    }
+    return null;
+  }
+
+  async DeleteByUser(uid) {
+    const noteWithOwnership = await notes.CheckOwnership(this.nid, uid);
+    if (noteWithOwnership?.nid) {
+      return await notes.DeleteNote(noteWithOwnership.nid);
+    }
+    const noteWithPerms = await notes.CheckPermissions(this.nid, uid);
+    if (noteWithPerms?.nid) {
+      return await notes.RemoveAccess(this.nid, uid);
     }
     return null;
   }
 
   async ChangeTitleByUser(uid, name) {
-    let noteWithPerms = await notes.CheckPermissions(this.nid, uid);
+    const noteWithPerms = await notes.CheckPermissions(this.nid, uid);
     if (noteWithPerms?.nid) {
       return await notes.UpdateName(noteWithPerms.nid, name);
     }
@@ -50,7 +62,7 @@ class Note {
   }
 
   async ChangeColorByUser(uid, color) {
-    let noteWithPerms = await notes.CheckPermissions(this.nid, uid);
+    const noteWithPerms = await notes.CheckPermissions(this.nid, uid);
     if (noteWithPerms?.nid) {
       return await notes.UpdateColor(noteWithPerms.nid, color);
     }
@@ -58,7 +70,7 @@ class Note {
   }
 
   async ShareWith(uid, userid) {
-    let noteWithPerms = await notes.CheckOwnership(this.nid, uid);
+    const noteWithPerms = await notes.CheckOwnership(this.nid, uid);
     if (noteWithPerms?.nid) {
       return await notes.LinkUser(this.nid, userid);
     }
@@ -66,7 +78,7 @@ class Note {
   }
 
   async RemoveAccess(uid, userid) {
-    let noteWithPerms = await notes.CheckOwnership(this.nid, uid);
+    const noteWithPerms = await notes.CheckOwnership(this.nid, uid);
     if (noteWithPerms?.nid) {
       return await notes.RemoveAccess(this.nid, userid);
     }
@@ -74,7 +86,7 @@ class Note {
   }
 
   async CheckPermissions(uid) {
-    let permissions = await notes.CheckOwnership(this.nid, uid);
+    const permissions = await notes.CheckPermissions(this.nid, uid);
     return permissions;
   }
 }

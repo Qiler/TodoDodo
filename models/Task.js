@@ -42,7 +42,7 @@ class Task {
   }
 
   async CheckPermissions(uid) {
-    let permissions = await notes.CheckOwnership(this.nid, uid);
+    let permissions = await notes.CheckPermissions(this.nid, uid);
     return permissions;
   }
 }
