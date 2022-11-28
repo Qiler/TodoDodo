@@ -412,7 +412,7 @@ main {
 }
 
 .sticky-title {
-  background-color: rgba(255, 255, 255, 0.322);
+  background-color: rgba(255, 255, 255, 0.1);
   border: none;
   outline: none;
   width: 100%;
@@ -421,6 +421,7 @@ main {
   border-radius: 2px;
   padding: 0;
   font: 20px "Travel October", sans-serif;
+  backdrop-filter: brightness(110%);
 }
 
 /* Sticky menu */
@@ -446,7 +447,7 @@ main {
 }
 
 .sticky-menu-button-bars {
-  background-color: rgba(126, 126, 126, 0.5);
+  background-color: rgba(0, 0, 0, 0.1);
   width: 80%;
   min-height: 15%;
   margin: 0% 10% 0% 10%;
