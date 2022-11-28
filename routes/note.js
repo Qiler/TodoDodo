@@ -22,6 +22,11 @@ router.post("/editname/:noteId", async (req, res) => {
   if (!req.params.noteId) {
     return res.status(400).json({ error: "Missing note ID." });
   }
+
+  if (req.body.name.length() > 40) {
+    req.body.name = req.body.name.slice(0, 40);
+  }
+
   const note = new Note({ nid: req.params.noteId });
   const updatedNote = await note.ChangeTitleByUser(req.session.user.uid, req.body.name);
   if (updatedNote) {
@@ -33,8 +38,13 @@ router.post("/editname/:noteId", async (req, res) => {
 router.post("/editcolor/:noteId", async (req, res) => {
   req.params.noteId = parseInt(req.params.noteId);
   if (!req.params.noteId) {
-    return res.sendStatus(400);
+    return res.status(400).json({ error: "Missing note ID." });
   }
+
+  if (!req.body.color.match(/^#([0-9a-f]{3}){1,2}$/i)) {
+    return res.status(400).json({ error: "Blank or malformed color." });
+  }
+
   const note = new Note({ nid: req.params.noteId });
   const updatedNote = await note.ChangeColorByUser(req.session.user.uid, req.body.color);
   if (updatedNote) {
@@ -46,8 +56,9 @@ router.post("/editcolor/:noteId", async (req, res) => {
 router.post("/delete/:noteId", async (req, res) => {
   req.params.noteId = parseInt(req.params.noteId);
   if (!req.params.noteId) {
-    return res.sendStatus(400);
+    return res.status(400).json({ error: "Missing note ID." });
   }
+
   const note = new Note({ nid: req.params.noteId });
   const deletedNote = await note.DeleteByUser(req.session.user.uid);
   if (deletedNote) {
@@ -59,9 +70,14 @@ router.post("/delete/:noteId", async (req, res) => {
 router.post("/removeaccess/:noteId", async (req, res) => {
   req.params.noteId = parseInt(req.params.noteId);
   if (!req.params.noteId) {
-    return res.sendStatus(400);
+    return res.status(400).json({ error: "Missing note ID." });
   }
+
   req.body.userid = parseInt(req.body.userid);
+  if (!req.body.userid) {
+    return res.status(400).json({ error: "Missing user ID." });
+  }
+
   const note = new Note({ nid: req.params.noteId });
   const updatedNote = await note.RemoveAccess(req.session.user.uid, req.body.userid);
   if (updatedNote) {
@@ -72,11 +88,20 @@ router.post("/removeaccess/:noteId", async (req, res) => {
 
 router.post("/share/:noteId", async (req, res) => {
   req.params.noteId = parseInt(req.params.noteId);
+  if (!req.params.noteId) {
+    return res.status(400).json({ error: "Missing note ID." });
+  }
+
+  if (!req.body.user) {
+    return res.status(400).json({ error: "Missing user name." });
+  }
+
   const user = new UserDto({});
   await user.FindByName(req.body.user);
-  if (!user.uid || !req.params.noteId) {
-    return res.sendStatus(400);
+  if (!user.uid) {
+    return res.status(404).json({ error: "User not found." });
   }
+
   const note = new Note({ nid: req.params.noteId });
   const updatedNote = await note.ShareWith(req.session.user.uid, user.uid);
   if (updatedNote) {

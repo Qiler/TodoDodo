@@ -19,6 +19,7 @@ router.post("/create/:noteId", async (req, res) => {
   if (!req.params.noteId) {
     return res.status(400).json({ error: "Missing note ID." });
   }
+
   const note = new Note({ nid: req.params.noteId });
   const hasPermissions = note.CheckPermissions(req.session.user.uid);
   if (hasPermissions) {
@@ -38,6 +39,7 @@ router.post("/edit/:taskId", async (req, res) => {
   if (!req.params.taskId) {
     return res.status(400).json({ error: "Missing task ID." });
   }
+
   let task = await tasks.GetByTid(req.params.taskId);
   if (task) {
     task = new Task(task);
@@ -56,6 +58,7 @@ router.post("/delete/:taskId", async (req, res) => {
   if (!req.params.taskId) {
     return res.status(400).json({ error: "Missing task ID." });
   }
+
   let task = await tasks.GetByTid(req.params.taskId);
   if (task) {
     task = new Task(task);
@@ -70,10 +73,14 @@ router.post("/delete/:taskId", async (req, res) => {
 });
 
 router.post("/updatetaskdue/:taskId", async (req, res) => {
-  let user = req.session.user;
+  const user = req.session.user;
   req.params.taskId = parseInt(req.params.taskId);
   if (!req.params.taskId) {
     return res.status(400).json({ error: "Missing task ID." });
+  }
+
+  if (!req.body.dueDate) {
+    return res.status(400).json({ error: "Missing due date." });
   }
 
   let task = await tasks.GetByTid(req.params.taskId);

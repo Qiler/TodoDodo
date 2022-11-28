@@ -45,7 +45,7 @@ router.post("/submit", async (req, res) => {
     return throwError(req, res, "Password must be at least 6 characters long.");
   }
 
-  let password = await bcrypt.hash(req.body.password, 10);
+  const password = await bcrypt.hash(req.body.password, 10);
 
   await users.AddUser(req.body.username, req.body.email, password);
   dbUser = await users.GetByUsername(req.body.username);

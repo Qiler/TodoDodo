@@ -22,6 +22,7 @@ router.post("/", async (req, res) => {
   if (dbUser?.uid == undefined) {
     return throwError(req, res, "Incorrect Username or Password.");
   }
+
   let user = new User(dbUser);
   let isPasswordCorrect = await bcrypt.compare(req.body.password, dbUser.password);
   if (isPasswordCorrect) {
