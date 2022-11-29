@@ -1,0 +1,41 @@
+<div class="cork-board" style="background-color: rgba(255, 0, 0, 0)">
+  <div class="container">
+    <% notes.forEach(note => { %>
+      <div class="sticky" style="z-index: <%= notesCount-- %>" id="sticky-<%= note.nid %>" data-nid="<%= note.nid %>">
+        <div class="sticky-container" style="background-color: <%= note.color %>">
+          <div class="sticky-footer">
+            <form action="note/editname/<%= note.nid %>" autocomplete="off" method="POST">
+              <input class="sticky-title" name="name" type="text" value="<%= note.name %>" autocomplete="false" />
+            </form>
+          </div>
+          <div class="task-list">
+            <% note.tasks?.forEach(task => { %>
+              <div class="task" id="task-<%= task.tid %>" data-tid="<%= task.tid %>">
+                <form class="task-form" action="task/edit/<%= task.tid %>" autocomplete="off" method="POST">
+                  <input class="task-checkbox" type="checkbox" name="checked" id="task-checkbox<%= task.tid %>" <% if( task.checked ) { %> checked <% } %>/>
+                  <label class="task-checkbox-label" for="task-checkbox<%= task.tid %>">□</label>
+                  <input class="task-description-hidden" name="description" type="hidden" value="<%= task.description %>">
+                  <span class="task-description" type="text" role="textbox" contenteditable="true" value="<%= task.description %>" autocomplete="false"><%= task.description %></span>
+                  <time class="timeago task-finished-date" datetime="<%= task.finishedDate.getTime() == 0 ? '' : task.finishedDate.toUTCString().toLowerCase() %>"></time>
+                  <time class="timeago task-due-date" datetime="<%= task.dueDate.getTime() == 0 ? '' : task.dueDate.toUTCString().toLowerCase() %>"></time>
+                  <div class="task-description-padding"></div>
+                </form>
+                <button class="task-menu-button"><i class="mdi mdi-cog"></i></button>
+              </div>
+            <% }) %>
+          </div>
+          <form class="sticky-add-form" action="task/create/<%= note.nid %>" method="POST">
+            <button class="sticky-add" type="submit">+</button>
+          </form>
+        </div>
+        <div class="sticky-menu">
+          <div class="sticky-menu-button">
+            <div class="sticky-menu-button-bars"></div>
+            <div class="sticky-menu-button-bars"></div>
+            <div class="sticky-menu-button-bars"></div>
+          </div>
+        </div>
+      </div>
+    <% }) %>
+  </div>
+</div>
