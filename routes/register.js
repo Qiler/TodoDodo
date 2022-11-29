@@ -41,7 +41,7 @@ router.post("/submit", async (req, res) => {
     return throwError(req, res, "Password cannot be blank.");
   }
 
-  if (req.body.password.length() < 6) {
+  if (req.body.password.length < 6) {
     return throwError(req, res, "Password must be at least 6 characters long.");
   }
 
