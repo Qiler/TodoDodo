@@ -1,3 +1,5 @@
+const ApiException = require("../exceptions/ApiException");
+
 class NoteRepository {
   constructor(db) {
     this.db = db;
@@ -7,8 +9,8 @@ class NoteRepository {
     try {
       const result = await this.db.queryAsync("SELECT * FROM notes;", []);
       return result?.rows;
-    } catch {
-      return null;
+    } catch (ex) {
+      throw new ApiException("Unable to get all notes from database.", ex);
     }
   }
 
@@ -16,8 +18,8 @@ class NoteRepository {
     try {
       const result = await this.db.queryAsync("SELECT * FROM notes WHERE nid = ? LIMIT 1;", [nid]);
       return result?.rows[0];
-    } catch {
-      return null;
+    } catch (ex) {
+      throw new ApiException(`Unable to get note: ${nid}.`, ex);
     }
   }
 
@@ -25,8 +27,8 @@ class NoteRepository {
     try {
       const result = await this.db.queryAsync("SELECT * FROM notes WHERE ownerId = ?;", [uid]);
       return result?.rows;
-    } catch {
-      return null;
+    } catch (ex) {
+      throw new ApiException(`Unable to get note owned by user: ${uid}`, ex);
     }
   }
 
@@ -34,8 +36,8 @@ class NoteRepository {
     try {
       const result = await this.db.queryAsync("SELECT * FROM notes LEFT JOIN userNotes ON notes.nid = userNotes.nid WHERE userNotes.uid = ?;", [uid]);
       return result?.rows;
-    } catch {
-      return null;
+    } catch (ex) {
+      throw new ApiException(`Unable to get notes for user: ${uid}`, ex);
     }
   }
 
@@ -48,8 +50,8 @@ class NoteRepository {
         return result.rows[0];
       }
       return null;
-    } catch {
-      return null;
+    } catch (ex) {
+      throw new ApiException(`Unable to add note for user: ${uid}`, ex);
     }
   }
 
@@ -63,8 +65,8 @@ class NoteRepository {
         [uid, nid]
       );
       return result?.rows[0];
-    } catch {
-      return null;
+    } catch (ex) {
+      throw new ApiException(`Unable to check permissions for note: ${nid} for user: ${uid}`, ex);
     }
   }
 
@@ -78,8 +80,8 @@ class NoteRepository {
         [uid, nid]
       );
       return result?.rows[0];
-    } catch {
-      return null;
+    } catch (ex) {
+      throw new ApiException(`Unable to check ownership of note: ${nid} for user: ${uid}`, ex);
     }
   }
 
@@ -87,40 +89,40 @@ class NoteRepository {
     try {
       const link = [uid, nid].join("-");
       return await this.db.runAsync("INSERT INTO userNotes (link,nid,uid,isOwner) VALUES (?,?,?,?);", [link, nid, uid, false]);
-    } catch {
-      return null;
+    } catch (ex) {
+      throw new ApiException(`Unable to give user: ${uid} access to note: ${nid}`, ex);
     }
   }
 
   async RemoveAccess(nid, uid) {
     try {
       return await this.db.runAsync("DELETE FROM userNotes WHERE nid = ? AND uid = ? and userNotes.isOwner = false;", [nid, uid]);
-    } catch {
-      return null;
+    } catch (ex) {
+      throw new ApiException(`Unable to remove access for user: ${uid} from note: ${nid}`, ex);
     }
   }
 
   async DeleteNote(nid) {
     try {
       return await this.db.runAsync("DELETE FROM notes WHERE nid = ?;", [nid]);
-    } catch {
-      return null;
+    } catch (ex) {
+      throw new ApiException(`Unable to delete note: ${nid}`, ex);
     }
   }
 
   async UpdateName(nid, name) {
     try {
       return await this.db.runAsync("UPDATE notes SET name = ? WHERE nid = ?;", [name, nid]);
-    } catch {
-      return null;
+    } catch (ex) {
+      throw new ApiException(`Unable to update name for note: ${nid}`, ex);
     }
   }
 
   async UpdateColor(nid, color) {
     try {
       return await this.db.runAsync("UPDATE notes SET color = ? WHERE nid = ?;", [color, nid]);
-    } catch {
-      return null;
+    } catch (ex) {
+      throw new ApiException(`Unable to update color for note: ${nid}`, ex);
     }
   }
 }
