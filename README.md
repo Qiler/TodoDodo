@@ -22,6 +22,10 @@ When you check tasks, the app keeps track of who and when someone completed them
 - Type: `npm install`
 - Type: `npm start`
 
+### Docker
+
+It is also available as a Docker container on [Docker Hub](https://hub.docker.com/repository/docker/qiler/todododo)
+
 ### Configuration
 
 - Create environment variable called `TODODODO_PORT` and set it to port that you want the app to listen on.

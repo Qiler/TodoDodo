@@ -664,7 +664,7 @@ main {
 }
 
 .task-due-date:not([datetime=""]):before {
-  content: "Due in ";
+  content: "Due ";
 }
 
 .task-finished-date:not([datetime=""]):before {

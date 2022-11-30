@@ -1,6 +1,6 @@
 const sqlite3 = require("sqlite3").verbose();
 
-db = new sqlite3.Database("./todododo.db");
+db = new sqlite3.Database("./db/todododo.db");
 
 db.queryAsync = function (sql, params) {
   var that = this;

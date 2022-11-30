@@ -10,8 +10,6 @@ Run npm ci --only=production
 
 COPY . .
 
-ENV TODODODO_PORT 8080
-
-EXPOSE ${TODODODO_PORT}
+EXPOSE 8080/tcp
 
 CMD [ "node", "app.js", "--production"]
