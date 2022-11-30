@@ -18,7 +18,7 @@ When you check tasks, the app keeps track of who and when someone completed them
 
 - Install NPM https://nodejs.org/en/download/.
 - Open command line in project folder.
-- Clone this repository with command. `git clone https://git.internal.st/internal/todododo`
+- Clone this repository with command. `git clone https://github.com/Qiler/TodoDodo`
 - Type: `npm install`
 - Type: `npm start`
 
