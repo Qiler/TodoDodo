@@ -10,7 +10,7 @@ router.get("/", async (req, res) => {
   res.render("register");
 });
 
-router.post("/submit", async (req, res) => {
+router.post("/", async (req, res) => {
   if (!req.body.username) {
     return throwError(req, res, "Username cannot be blank.");
   }
@@ -60,13 +60,13 @@ router.post("/submit", async (req, res) => {
     req.session.user = user;
     req.session.save(function (err) {
       if (err) return next(err);
-      res.redirect("/");
+      return res.redirect("/");
     });
   });
 });
 
 function throwError(req, res, err) {
-  res.status(400).render("register", { errorMessage: err, formInput: { username: req.body.username, email: req.body.email } });
+  return res.render("register", { errorMessage: err, formInput: { username: req.body.username, email: req.body.email } });
 }
 
 module.exports = router;

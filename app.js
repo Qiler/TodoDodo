@@ -40,4 +40,4 @@ app.use("/note", require("./routes/note"));
 app.use("/task", require("./routes/task"));
 app.use("/api", require("./routes/api"));
 
-app.listen(process.env.TODODODO_PORT || 3000);
+app.listen(process.env.TODODODO_PORT || 8080);
